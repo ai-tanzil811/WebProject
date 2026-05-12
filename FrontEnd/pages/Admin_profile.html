@@ -4,33 +4,45 @@
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
   <title>MediVault | Admin Profile</title>
+
   <link rel="stylesheet" href="../Styles/adminNavbar.css" />
   <link rel="stylesheet" href="../Styles/adminDashboard.css" />
+  <link rel="stylesheet" href="../Styles/admin_profile.css" />
 </head>
+
 <body class="admin-page" data-active-nav="dashboard">
+
   <header class="app-header">
     <div data-include="admin-navbar"></div>
   </header>
 
-  <main class="page" style="max-width:960px;margin:2rem auto;padding:1rem;">
-    <section class="card">
-      <h1>Admin Profile</h1>
+  <main class="container">
+    <section class="card profile-card">
+
+      <h1 class="title">Admin Profile</h1>
       <p class="subtitle">Manage your admin account.</p>
 
-      <div class="profile-grid" style="margin-top:1rem;">
+      <div class="profile-grid">
+
         <div class="profile-row">
           <span class="label">Name</span>
           <span class="value" id="profile-name">—</span>
         </div>
+
         <div class="profile-row">
           <span class="label">Email</span>
           <span class="value" id="profile-email">—</span>
         </div>
+
         <div class="profile-row">
           <span class="label">Shop Banner</span>
-          <span class="value"><img id="profile-photo" src="/assets/default-user.png" alt="banner" style="height:48px;border-radius:6px;"/></span>
+          <span class="value">
+            <img id="profile-photo" class="profile-img" src="/assets/default-user.png" alt="banner" />
+          </span>
         </div>
+
       </div>
+
     </section>
   </main>
 
