@@ -325,7 +325,7 @@ router.post('/login', async (req, res) => {
       res.json({
         success: true,
         message: 'Login successful',
-        redirect: login_role === 'admin' ? '/admin/dashboard.html' : '/user/dashboard.html'
+        redirect: login_role === 'admin' ? '/admin/Admin_dashboard' : '/user/Shopping.html'
       });
     } finally {
       connection.release();
