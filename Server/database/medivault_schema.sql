@@ -59,7 +59,12 @@ CREATE TABLE Medicines (
   updated_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP,
   INDEX idx_generic_name (generic_name),
   INDEX idx_brand_name (brand_name),
-  INDEX idx_expiry_date (expiry_date)
+  INDEX idx_expiry_date (expiry_date),
+  INDEX idx_quantity (quantity),
+  INDEX idx_dosage_form (dosage_form),
+  INDEX idx_is_restricted (is_restricted),
+  CONSTRAINT chk_medicines_quantity_nonnegative CHECK (quantity >= 0),
+  CONSTRAINT chk_medicines_price_nonnegative CHECK (price IS NULL OR price >= 0)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
 
 -- ==================== DRUG CONFLICTS TABLE ====================
@@ -74,7 +79,10 @@ CREATE TABLE DrugConflicts (
   FOREIGN KEY (medicine_id_1) REFERENCES Medicines(medicine_id) ON DELETE CASCADE,
   FOREIGN KEY (medicine_id_2) REFERENCES Medicines(medicine_id) ON DELETE CASCADE,
   UNIQUE KEY unique_conflict (medicine_id_1, medicine_id_2),
-  INDEX idx_conflict_level (conflict_level)
+  INDEX idx_conflict_level (conflict_level),
+  INDEX idx_medicine_id_1 (medicine_id_1),
+  INDEX idx_medicine_id_2 (medicine_id_2),
+  CONSTRAINT chk_conflict_distinct_medicines CHECK (medicine_id_1 <> medicine_id_2)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
 
 -- ==================== ORDER STATUSES TABLE ====================

@@ -139,6 +139,27 @@
   flex-wrap: wrap;
 }
 
+.search-summary {
+  display: flex;
+  gap: 8px;
+  flex-wrap: wrap;
+  margin-bottom: 14px;
+}
+
+.summary-pill {
+  background: var(--white);
+  border: 1px solid var(--border);
+  border-radius: 999px;
+  padding: 6px 10px;
+  font-size: 11px;
+  color: var(--text-secondary);
+  box-shadow: var(--shadow-sm);
+}
+
+.summary-pill.accent {
+  color: var(--blue);
+}
+
 .filter-tab {
   padding: 5px 12px;
   border-radius: 20px;
@@ -173,6 +194,26 @@
   display: grid;
   gap: 8px;
 }
+
+.card-chips {
+  display: flex;
+  gap: 6px;
+  flex-wrap: wrap;
+}
+
+.conflict-badge,
+.form-badge {
+  font-size: 9px;
+  font-weight: 700;
+  letter-spacing: 0.5px;
+  text-transform: uppercase;
+  padding: 4px 6px;
+  border-radius: var(--radius-sm);
+}
+
+.conflict-badge.active { background: var(--red-light); color: var(--red); }
+.conflict-badge.clear { background: var(--green-light); color: var(--green); }
+.form-badge { background: var(--bg); color: var(--text-secondary); }
 
 .card-top { display: flex; align-items: center; justify-content: space-between; }
 

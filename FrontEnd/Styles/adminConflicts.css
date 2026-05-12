@@ -35,7 +35,7 @@ body.admin-page {
   letter-spacing: 0.2px;
 }
 
-.page { padding: 20px; max-width: 900px; margin: 0 auto; }
+.page { padding: 20px; max-width: 1200px; margin: 0 auto; }
 
 .page-header {
   display: flex;
@@ -43,6 +43,115 @@ body.admin-page {
   justify-content: space-between;
   gap: 12px;
   margin-bottom: 16px;
+}
+
+.stats-row {
+  display: flex;
+  gap: 8px;
+  flex-wrap: wrap;
+  margin-bottom: 16px;
+}
+
+.stat-pill {
+  background: var(--white);
+  border: 1px solid var(--border);
+  border-radius: 999px;
+  padding: 6px 10px;
+  font-size: 11px;
+  color: var(--text-secondary);
+  box-shadow: var(--shadow-sm);
+}
+
+.conflict-layout {
+  display: grid;
+  grid-template-columns: 360px 1fr;
+  gap: 14px;
+  align-items: start;
+}
+
+.panel {
+  background: var(--white);
+  border: 1px solid var(--border);
+  border-radius: var(--radius);
+  padding: 14px;
+  box-shadow: var(--shadow-sm);
+}
+
+.panel-title {
+  font-size: 14px;
+  font-weight: 700;
+  margin-bottom: 4px;
+}
+
+.form-note {
+  font-size: 11px;
+  color: var(--text-secondary);
+  margin-bottom: 12px;
+}
+
+.form-label {
+  display: block;
+  font-size: 10px;
+  text-transform: uppercase;
+  letter-spacing: 0.6px;
+  color: var(--text-muted);
+  font-weight: 700;
+  margin: 10px 0 6px;
+}
+
+.form-control {
+  width: 100%;
+  border: 1px solid var(--border);
+  border-radius: var(--radius-sm);
+  padding: 9px 10px;
+  background: var(--bg);
+  font-size: 12px;
+  font-family: inherit;
+  color: var(--text-secondary);
+}
+
+.form-textarea {
+  min-height: 90px;
+  resize: vertical;
+}
+
+.form-row {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 10px;
+}
+
+.btn-secondary {
+  border: 1px solid var(--border);
+  background: var(--white);
+  color: var(--text-secondary);
+  border-radius: var(--radius-sm);
+  padding: 8px 14px;
+  font-size: 12px;
+  font-weight: 600;
+  cursor: pointer;
+  font-family: inherit;
+}
+
+.form-actions {
+  display: flex;
+  gap: 8px;
+  flex-wrap: wrap;
+  margin-top: 14px;
+}
+
+.conflict-list {
+  display: grid;
+  gap: 12px;
+}
+
+.conflict-empty {
+  background: var(--white);
+  border: 1px dashed var(--border);
+  border-radius: var(--radius);
+  padding: 18px;
+  text-align: center;
+  color: var(--text-secondary);
 }
 
 .page-title { font-size: 20px; font-weight: 700; margin-bottom: 4px; }
@@ -128,6 +237,37 @@ body.admin-page {
 
 .conflict-desc { font-size: 11px; color: var(--text-secondary); line-height: 1.4; margin-right: 26px; }
 
+.conflict-reco {
+  margin-top: 8px;
+  font-size: 11px;
+  color: var(--text-primary);
+  background: var(--bg);
+  border: 1px solid var(--border);
+  border-radius: var(--radius-sm);
+  padding: 8px 10px;
+}
+
+.card-actions {
+  display: flex;
+  gap: 8px;
+  flex-wrap: wrap;
+  margin-top: 10px;
+}
+
+.card-btn {
+  border: 1px solid var(--border);
+  background: var(--white);
+  color: var(--text-secondary);
+  border-radius: 999px;
+  padding: 6px 10px;
+  font-size: 11px;
+  font-weight: 700;
+  cursor: pointer;
+  font-family: inherit;
+}
+
+.card-btn.danger { color: var(--red); }
+
 .card-check {
   position: absolute;
   top: 14px;
@@ -139,6 +279,9 @@ body.admin-page {
 
 @media (max-width: 720px) {
   .page-header { flex-direction: column; align-items: flex-start; }
+
+  .conflict-layout,
+  .form-row { grid-template-columns: 1fr; }
 
   .drug-pair { grid-template-columns: 1fr; }
 

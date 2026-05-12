@@ -19,19 +19,21 @@
   <main class="page">
     <section class="top-cards">
       <div class="alert-card red">
+        <div class="metric-icon metric-icon-red">!</div>
         <div class="alert-badge red">Critical Alert</div>
-        <div class="alert-value red">12</div>
+        <div class="alert-value red" id="lowStockCount">12</div>
         <div class="alert-label">Low Stock Alerts</div>
       </div>
       <div class="alert-card blue">
+        <div class="metric-icon metric-icon-blue">⏳</div>
         <div class="alert-badge blue">Attention Required</div>
-        <div class="alert-value blue">08</div>
+        <div class="alert-value blue" id="expiringCount">08</div>
         <div class="alert-label">Expiring Soon</div>
       </div>
       <div class="medicine-card">
         <div class="pill-icon">M</div>
         <div class="medicine-info">
-          <div class="medicine-value">94</div>
+          <div class="medicine-value" id="totalMedicineCount">94</div>
           <div class="medicine-label">Total Medicine</div>
         </div>
       </div>
@@ -45,6 +47,7 @@
             <button class="icon-btn" type="button" title="Export">Export</button>
           </div>
         </div>
+        <div class="stock-summary" id="inventoryStatus">Loading inventory data...</div>
         <div class="stock-controls">
           <input class="control-input" id="inventorySearch" type="search" placeholder="Search medicine" />
           <input class="control-input" id="inventoryStrength" type="text" placeholder="Strength" />
@@ -76,54 +79,70 @@
         </table>
       </div>
 
-      <div class="panel form-panel">
-        <div class="form-title">Add New Medicine</div>
+      <form class="panel form-panel" id="medicineForm">
+        <div class="form-title" id="medicineFormTitle">Add New Medicine</div>
+        <div class="form-status" id="medicineFormStatus">Fill in the inventory details and save them to the database.</div>
         <div class="form-group">
-          <label class="form-label">Medicine Name</label>
-          <input class="form-input" type="text" placeholder="e.g. Metformin" />
+          <label class="form-label" for="genericName">Generic Name</label>
+          <input class="form-input" id="genericName" type="text" placeholder="e.g. Metformin" required />
         </div>
         <div class="form-group">
-          <label class="form-label">Description</label>
-          <textarea class="form-input" placeholder="Primary usage and storage requirements..."></textarea>
+          <label class="form-label" for="brandName">Brand Name</label>
+          <input class="form-input" id="brandName" type="text" placeholder="e.g. Glucophage" />
+        </div>
+        <div class="form-row">
+          <div class="form-group">
+            <label class="form-label" for="strength">Strength</label>
+            <input class="form-input" id="strength" type="text" placeholder="e.g. 500mg" />
+          </div>
+          <div class="form-group">
+            <label class="form-label" for="dosageForm">Dosage Form</label>
+            <input class="form-input" id="dosageForm" type="text" placeholder="Tablet, Capsule, Syrup" />
+          </div>
+        </div>
+        <div class="form-row">
+          <div class="form-group">
+            <label class="form-label" for="manufacturer">Manufacturer</label>
+            <input class="form-input" id="manufacturer" type="text" placeholder="e.g. Pharma Inc" />
+          </div>
+          <div class="form-group">
+            <label class="form-label" for="batchNumber">Batch Number</label>
+            <input class="form-input" id="batchNumber" type="text" placeholder="Optional batch id" />
+          </div>
+        </div>
+        <div class="form-row">
+          <div class="form-group">
+            <label class="form-label" for="quantity">Stock Level</label>
+            <input class="form-input" id="quantity" type="number" min="0" placeholder="0" required />
+          </div>
+          <div class="form-group">
+            <label class="form-label" for="price">Unit Price</label>
+            <input class="form-input" id="price" type="number" min="0" step="0.01" placeholder="0.00" />
+          </div>
+        </div>
+        <div class="form-group">
+          <label class="form-label" for="expiryDate">Expiry Date</label>
+          <input class="form-input" id="expiryDate" type="date" />
+        </div>
+        <div class="form-group">
+          <label class="form-label" for="description">Description</label>
+          <textarea class="form-input form-textarea" id="description" placeholder="Primary usage, storage requirements, or notes..."></textarea>
         </div>
         <div class="toggle-row">
           <div>
             <div class="form-label">Prescription Required</div>
-            <div class="form-hint">Is a doctor's script mandatory?</div>
+            <div class="form-hint">Mark restricted medicines as prescription-only.</div>
           </div>
           <label class="toggle">
-            <input type="checkbox" />
+            <input id="isRestricted" type="checkbox" />
             <span class="toggle-track"></span>
           </label>
         </div>
-        <div class="form-row">
-          <div>
-            <label class="form-label">Stock Level</label>
-            <input class="form-input" type="number" placeholder="0" />
-          </div>
-          <div>
-            <label class="form-label">Expiry Date</label>
-            <input class="form-input" type="text" placeholder="mm/dd/yyyy" />
-          </div>
+        <div class="form-actions">
+          <button class="btn-primary" id="medicineSubmitBtn" type="submit">Register Product</button>
+          <button class="btn-secondary" id="medicineResetBtn" type="button">Reset</button>
         </div>
-        <div class="form-group">
-          <label class="form-label">Conflict Tags</label>
-          <div class="tag-row">
-            <span class="tag">Azimorphine</span>
-            <span class="tag">paracitamol</span>
-          </div>
-          <input class="form-input" type="text" placeholder="Add tag..." />
-        </div>
-        <div class="form-group">
-          <label class="form-label">Categories</label>
-          <div class="tag-row">
-            <span class="tag">cold</span>
-            <span class="tag">Pregnancy</span>
-          </div>
-          <input class="form-input" type="text" placeholder="Add tag..." />
-        </div>
-        <button class="btn-primary" type="button">Register Product</button>
-      </div>
+      </form>
     </section>
   </main>
 

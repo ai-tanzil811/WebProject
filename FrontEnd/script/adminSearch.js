@@ -4,10 +4,24 @@ document.addEventListener("DOMContentLoaded", () => {
   const categorySelect = document.getElementById("lookupCategory");
   const filterGroup = document.getElementById("lookupFilters");
   const cardsContainer = document.getElementById("lookupCards");
+  const summaryContainer = document.getElementById("lookupSummary");
 
   const LOW_STOCK_THRESHOLD = 20;
   let activeFilter = "all";
   let allMedicines = [];
+
+  const readJsonResponse = async (response) => {
+    const text = await response.text();
+    if (!text) {
+      return null;
+    }
+
+    try {
+      return JSON.parse(text);
+    } catch (error) {
+      return null;
+    }
+  };
 
   const formatDate = (value) => {
     if (!value) {
@@ -40,6 +54,9 @@ document.addEventListener("DOMContentLoaded", () => {
     cardsContainer.innerHTML = "";
     if (!items || items.length === 0) {
       cardsContainer.innerHTML = "<div class=\"empty-state\">No medicines found.</div>";
+      if (summaryContainer) {
+        summaryContainer.innerHTML = "<div class=\"summary-pill\">No matching medicines in the current view.</div>";
+      }
       return;
     }
 
@@ -48,6 +65,8 @@ document.addEventListener("DOMContentLoaded", () => {
       const stockLabel = medicine.quantity <= LOW_STOCK_THRESHOLD ? "Low Stock" : "In Stock";
       const rxClass = medicine.is_restricted ? "rx-badge rx" : "rx-badge otc";
       const rxLabel = medicine.is_restricted ? "Rx Only" : "OTC";
+      const conflictClass = medicine.conflict_count > 0 ? "conflict-badge active" : "conflict-badge clear";
+      const conflictLabel = medicine.conflict_count > 0 ? `${medicine.conflict_count} Conflict${medicine.conflict_count === 1 ? "" : "s"}` : "No Conflicts";
 
       const card = document.createElement("div");
       card.className = "med-card";
@@ -58,6 +77,10 @@ document.addEventListener("DOMContentLoaded", () => {
         </div>
         <div class="card-name">${medicine.generic_name}</div>
         <div class="card-sub">${medicine.brand_name} - ${medicine.strength || ""}</div>
+        <div class="card-chips">
+          <span class="${conflictClass}">${conflictLabel}</span>
+          <span class="form-badge">${medicine.dosage_form || "Unknown Form"}</span>
+        </div>
         <div class="meta-row">
           <span class="meta-label">Stock Level</span>
           <span class="meta-value ${medicine.quantity <= LOW_STOCK_THRESHOLD ? "red" : "green"}">${medicine.quantity} Units</span>
@@ -69,6 +92,14 @@ document.addEventListener("DOMContentLoaded", () => {
       `;
       cardsContainer.appendChild(card);
     });
+
+    if (summaryContainer) {
+      const conflictCount = items.filter((medicine) => medicine.conflict_count > 0).length;
+      summaryContainer.innerHTML = `
+        <div class="summary-pill">Showing ${items.length} medicines</div>
+        <div class="summary-pill accent">${conflictCount} with conflict data</div>
+      `;
+    }
   };
 
   const applyFilters = () => {
@@ -92,6 +123,9 @@ document.addEventListener("DOMContentLoaded", () => {
     if (activeFilter === "rx") {
       filtered = filtered.filter((medicine) => medicine.is_restricted);
     }
+    if (activeFilter === "conflict") {
+      filtered = filtered.filter((medicine) => Number(medicine.conflict_count || 0) > 0);
+    }
 
     renderCards(filtered);
   };
@@ -99,12 +133,18 @@ document.addEventListener("DOMContentLoaded", () => {
   const fetchMedicines = () => {
     const params = new URLSearchParams({ limit: "100" });
     fetch(`/api/medicines?${params.toString()}`)
-      .then((response) => response.json())
+      .then(async (response) => {
+        const data = await readJsonResponse(response);
+        if (!response.ok || !data) {
+          throw new Error("Failed to load medicines");
+        }
+        return data;
+      })
       .then((data) => {
         if (!data.success) {
           throw new Error("Failed to load medicines");
         }
-        allMedicines = data.medicines;
+        allMedicines = data.medicines || [];
         buildCategories(allMedicines);
         applyFilters();
       })
