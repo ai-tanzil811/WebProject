@@ -52,7 +52,7 @@ npm run dev
 npm start
 ```
 
-The server will run on `http://localhost:3000`
+The server will run on `http://localhost:3000` by default, and will automatically try the next free port if `3000` is already in use.
 
 ## Features
 - User and Admin login pages

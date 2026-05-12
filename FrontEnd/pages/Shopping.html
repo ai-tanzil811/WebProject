@@ -1,0 +1,116 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>MediVault - Shop Medicines</title>
+  <link rel="stylesheet" href="../styles/shopping.css">
+</head>
+<body>
+  <div class="navbar">
+    <div class="navbar-container">
+      <div class="navbar-brand">🏥 MediVault</div>
+      <div class="navbar-menu">
+        <button class="btn-logout" id="logoutBtn">Logout</button>
+      </div>
+    </div>
+  </div>
+
+  <div class="container">
+    <div class="main-content">
+      <div class="sidebar">
+        <div class="search-box">
+          <input type="text" id="searchInput" placeholder="Search medicines...">
+          <button class="btn-search" id="searchBtn">Search</button>
+        </div>
+
+        <div class="filters">
+          <h3>Filters</h3>
+          <div class="filter-group">
+            <label for="strengthFilter">Strength:</label>
+            <input type="text" id="strengthFilter" placeholder="e.g., 500mg">
+          </div>
+          <div class="filter-group">
+            <label for="dosageFilter">Dosage Form:</label>
+            <select id="dosageFilter">
+              <option value="">All</option>
+              <option value="Tablet">Tablet</option>
+              <option value="Capsule">Capsule</option>
+              <option value="Syrup">Syrup</option>
+              <option value="Injection">Injection</option>
+              <option value="Cream">Cream</option>
+            </select>
+          </div>
+          <button class="btn-filter" id="applyFilterBtn">Apply Filters</button>
+          <button class="btn-clear-filter" id="clearFilterBtn">Clear Filters</button>
+        </div>
+
+        <div class="cart-summary">
+          <h3>Cart Summary</h3>
+          <div class="cart-items-count">Items: <span id="cartCount">0</span></div>
+          <div class="cart-total">Total: <span id="cartTotal">0.00</span> in taka</div>
+          <button class="btn-view-cart" id="viewCartBtn">View Cart</button>
+          <button class="btn-checkout" id="checkoutBtn">Checkout</button>
+        </div>
+      </div>
+
+      <div class="medicines-section">
+        <h1>Available Medicines</h1>
+        <div class="medicines-grid" id="medicinesGrid">
+          <!-- Medicines will be loaded here -->
+        </div>
+        <div class="loading" id="loadingSpinner" style="display: none;">
+          <p>Loading medicines...</p>
+        </div>
+        <div class="pagination" id="paginationContainer"></div>
+      </div>
+    </div>
+  </div>
+
+  <!-- Cart Modal -->
+  <div class="modal" id="cartModal">
+    <div class="modal-content">
+      <div class="modal-header">
+        <h2>Shopping Cart</h2>
+        <button class="btn-close" id="closeCartBtn">&times;</button>
+      </div>
+      <div class="modal-body">
+        <div class="cart-items-list" id="cartItemsList">
+          <!-- Cart items will be loaded here -->
+        </div>
+      </div>
+      <div class="modal-footer">
+        <div class="cart-total-large">Total: ₱<span id="cartTotalLarge">0.00</span></div>
+        <button class="btn-continue-shopping" id="continueShopping">Continue Shopping</button>
+        <button class="btn-checkout-cart" id="checkoutFromCart">Proceed to Checkout</button>
+      </div>
+    </div>
+  </div>
+
+  <!-- Conflict Warning Modal -->
+  <div class="modal" id="conflictModal">
+    <div class="modal-content modal-large">
+      <div class="modal-header">
+        <h2>⚠️ Drug Interaction Warning</h2>
+        <button class="btn-close" id="closeConflictBtn">&times;</button>
+      </div>
+      <div class="modal-body">
+        <p class="warning-intro">We've detected potential drug interactions in your cart:</p>
+        <div class="conflicts-list" id="conflictsList">
+          <!-- Conflicts will be listed here -->
+        </div>
+        <p class="warning-note">To proceed with checkout, please remove one of the conflicting medicines.</p>
+      </div>
+      <div class="modal-footer">
+        <button class="btn-remove-items" id="editCartBtn">Edit Cart</button>
+      </div>
+    </div>
+  </div>
+
+  <!-- Feedback Messages -->
+  <div class="feedback-message" id="feedbackMessage" data-feedback hidden></div>
+  <div class="success-message" id="successMessage" data-success hidden></div>
+
+  <script src="/script/shopping.js"></script>
+</body>
+</html>

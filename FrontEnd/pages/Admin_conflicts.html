@@ -1,0 +1,121 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>MediVault | Conflict Database</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link href="https://fonts.googleapis.com/css2?family=DM+Sans:wght@400;500;600;700&display=swap" rel="stylesheet" />
+  <link rel="stylesheet" href="../Styles/adminNavbar.css" />
+  <link rel="stylesheet" href="../Styles/adminConflicts.css" />
+</head>
+<body class="admin-page" data-active-nav="conflicts">
+  <div class="breadcrumb">Admin / Conflict DB</div>
+  <header class="app-header">
+    <div data-include="admin-navbar"></div>
+  </header>
+
+  <main class="page">
+    <section class="page-header">
+      <div>
+        <div class="page-title">Conflict Database</div>
+        <div class="page-sub">Manage and audit drug-to-drug interaction pairs.</div>
+      </div>
+      <button class="btn-add" type="button">+ Add Conflict Pair</button>
+    </section>
+
+    <section class="conflict-list">
+      <article class="conflict-card">
+        <div class="drug-pair">
+          <div class="drug-box">
+            <div class="drug-label">Medicine A</div>
+            <div class="drug-name">Aspirin<br />325mg</div>
+          </div>
+          <div class="conflict-middle">
+            <span class="severity-badge critical">Critical</span>
+            <div class="arrow-icon">&lt;-&gt;</div>
+          </div>
+          <div class="drug-box">
+            <div class="drug-label">Medicine B</div>
+            <div class="drug-name">Warfarin<br />5mg</div>
+          </div>
+        </div>
+        <div class="conflict-desc">
+          Increases bleeding risk significantly. Combined use may lead to life-threatening hemorrhage.
+          Monitoring of INR is strictly required if co-administration is unavoidable.
+        </div>
+        <input type="checkbox" class="card-check" aria-label="Select conflict" />
+      </article>
+
+      <article class="conflict-card">
+        <div class="drug-pair">
+          <div class="drug-box">
+            <div class="drug-label">Medicine A</div>
+            <div class="drug-name">Lisinopril<br />10mg</div>
+          </div>
+          <div class="conflict-middle">
+            <span class="severity-badge moderate">Moderate</span>
+            <div class="arrow-icon">&lt;-&gt;</div>
+          </div>
+          <div class="drug-box">
+            <div class="drug-label">Medicine B</div>
+            <div class="drug-name">Potassium<br />Chloride</div>
+          </div>
+        </div>
+        <div class="conflict-desc">
+          Risk of hyperkalemia. Use with caution in patients with renal impairment. Regular serum potassium
+          levels should be monitored during the first weeks of therapy.
+        </div>
+        <input type="checkbox" class="card-check" aria-label="Select conflict" />
+      </article>
+
+      <article class="conflict-card">
+        <div class="drug-pair">
+          <div class="drug-box">
+            <div class="drug-label">Medicine A</div>
+            <div class="drug-name">Simvastatin<br />40mg</div>
+          </div>
+          <div class="conflict-middle">
+            <span class="severity-badge critical">Critical</span>
+            <div class="arrow-icon">&lt;-&gt;</div>
+          </div>
+          <div class="drug-box">
+            <div class="drug-label">Medicine B</div>
+            <div class="drug-name">Clarithromycin</div>
+          </div>
+        </div>
+        <div class="conflict-desc">
+          Significant risk of myopathy and rhabdomyolysis. Clarithromycin inhibits CYP3A4, dramatically
+          increasing simvastatin plasma concentrations.
+        </div>
+        <input type="checkbox" class="card-check" aria-label="Select conflict" />
+      </article>
+
+      <article class="conflict-card">
+        <div class="drug-pair">
+          <div class="drug-box">
+            <div class="drug-label">Medicine A</div>
+            <div class="drug-name">Metformin<br />500mg</div>
+          </div>
+          <div class="conflict-middle">
+            <span class="severity-badge low">Low</span>
+            <div class="arrow-icon">&lt;-&gt;</div>
+          </div>
+          <div class="drug-box">
+            <div class="drug-label">Medicine B</div>
+            <div class="drug-name">Iodinated<br />Contrast</div>
+          </div>
+        </div>
+        <div class="conflict-desc">
+          Risk of lactic acidosis. Metformin should be withheld at the time of or prior to the imaging
+          procedure and for 48 hours subsequent to the procedure.
+        </div>
+        <input type="checkbox" class="card-check" aria-label="Select conflict" />
+      </article>
+    </section>
+  </main>
+
+  <script src="../script/adminNavbar.js"></script>
+</body>
+</html>

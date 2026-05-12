@@ -1,0 +1,142 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>MediVault | Admin Dashboard</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link href="https://fonts.googleapis.com/css2?family=DM+Sans:wght@400;500;600;700&display=swap" rel="stylesheet" />
+  <link rel="stylesheet" href="../Styles/adminNavbar.css" />
+  <link rel="stylesheet" href="../Styles/adminDashboard.css" />
+</head>
+<body class="admin-page" data-active-nav="dashboard">
+  <div class="breadcrumb">Admin / Dashboard</div>
+  <header class="app-header">
+    <div data-include="admin-navbar"></div>
+  </header>
+
+  <main class="page">
+    <section class="stat-grid">
+      <div class="stat-card">
+        <div class="stat-header">
+          <div class="stat-icon blue">T</div>
+          <span class="stat-label">Total</span>
+        </div>
+        <div class="stat-value blue" id="stat-total">0</div>
+        <div class="stat-sublabel">Active Medicines</div>
+      </div>
+      <div class="stat-card">
+        <div class="stat-header">
+          <div class="stat-icon red">!</div>
+          <span class="stat-label">Critical</span>
+        </div>
+        <div class="stat-value red" id="stat-low">0</div>
+        <div class="stat-sublabel">Low Stock Alerts</div>
+      </div>
+      <div class="stat-card">
+        <div class="stat-header">
+          <div class="stat-icon yellow">P</div>
+          <span class="stat-label">Pending</span>
+        </div>
+        <div class="stat-value yellow" id="stat-expiring">0</div>
+        <div class="stat-sublabel">Expiring Soon</div>
+      </div>
+      <div class="stat-card">
+        <div class="stat-header">
+          <div class="stat-icon teal">R</div>
+          <span class="stat-label">Review</span>
+        </div>
+        <div class="stat-value teal" id="stat-reviews">0</div>
+        <div class="stat-sublabel">Pending Rx Reviews</div>
+      </div>
+    </section>
+
+    <section class="content-grid">
+      <div class="panel">
+        <div class="panel-header">
+          <span class="panel-title">Recent Activity</span>
+          <a class="view-all" href="#">View All Logs</a>
+        </div>
+        <div class="activity-list" id="activity-list"></div>
+      </div>
+      <div class="side-panel">
+        <div class="panel quick-actions">
+          <div class="panel-title">Quick Actions</div>
+          <button class="btn-primary" type="button">Add New Medicine</button>
+          <button class="btn-secondary" type="button">Export Compliance Report</button>
+        </div>
+        <div class="panel conflicts-panel">
+          <div class="panel-header simple">
+            <span class="panel-title">Known Drug Conflicts</span>
+          </div>
+          <div class="conflict-item red">
+            <div>
+              <div class="conflict-drug">Aspirin vs Warfarin</div>
+              <div class="conflict-risk">High Risk: Hemorrhage</div>
+            </div>
+            <span class="conflict-tag">High</span>
+          </div>
+          <div class="conflict-item yellow">
+            <div>
+              <div class="conflict-drug">Ibuprofen vs Aspirin</div>
+              <div class="conflict-risk">Moderate Risk: GI Issues</div>
+            </div>
+            <span class="conflict-tag">Medium</span>
+          </div>
+          <div class="conflict-item blue">
+            <div>
+              <div class="conflict-drug">Lithium vs Diuretics</div>
+              <div class="conflict-risk">Monitor: Toxicity levels</div>
+            </div>
+            <span class="conflict-tag">Low</span>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <section class="panel inventory-panel">
+      <div class="panel-header">
+        <span class="panel-title">Inventory Overview (Priority Focus)</span>
+      </div>
+      <table>
+        <thead>
+          <tr>
+            <th>Medicine Name</th>
+            <th>Batch ID</th>
+            <th>Stock Level</th>
+            <th>Expiry Date</th>
+            <th>Action</th>
+          </tr>
+        </thead>
+        <tbody>
+          <tr>
+            <td><span class="med-name">Amoxicillin 500mg</span></td>
+            <td><span class="batch-id">#AMX-9902</span></td>
+            <td><span class="stock-label in-stock">85% In Stock</span></td>
+            <td><span class="expiry-date">May 2025</span></td>
+            <td><button class="action-btn" type="button">Edit</button></td>
+          </tr>
+          <tr>
+            <td><span class="med-name">Insulin Glargine</span></td>
+            <td><span class="batch-id">#INS-2210</span></td>
+            <td><span class="stock-label low-stock">Low Stock</span></td>
+            <td><span class="expiry-date">Dec 2023</span></td>
+            <td><button class="action-btn" type="button">Edit</button></td>
+          </tr>
+          <tr>
+            <td><span class="med-name">Metformin 850mg</span></td>
+            <td><span class="batch-id">#MET-3318</span></td>
+            <td><span class="stock-label in-stock">60% In Stock</span></td>
+            <td><span class="expiry-date">Mar 2026</span></td>
+            <td><button class="action-btn" type="button">Edit</button></td>
+          </tr>
+        </tbody>
+      </table>
+    </section>
+  </main>
+
+  <script src="../script/adminNavbar.js"></script>
+  <script src="../script/adminDashboard.js"></script>
+</body>
+</html>

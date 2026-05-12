@@ -3,10 +3,14 @@ const session = require('express-session');
 const cors = require('cors');
 const path = require('path');
 const authRoutes = require('./routes/auth');
+const medicinesRoutes = require('./routes/medicines');
+const cartRoutes = require('./routes/cart');
+const ordersRoutes = require('./routes/orders');
+const adminRoutes = require('./routes/admin');
 require('dotenv').config();
 
 const app = express();
-const PORT = process.env.PORT || 3000;
+const DEFAULT_PORT = Number.parseInt(process.env.PORT, 10) || 3000;
 
 app.use(cors());
 app.use(express.json());
@@ -25,12 +29,32 @@ app.use(session({
 app.use(express.static(path.join(__dirname, '../FrontEnd')));
 
 app.use('/api/auth', authRoutes);
+app.use('/api/medicines', medicinesRoutes);
+app.use('/api/cart', cartRoutes);
+app.use('/api/orders', ordersRoutes);
+app.use('/api/admin', adminRoutes);
 
 app.get('/', (req, res) => {
   res.sendFile(path.join(__dirname, '../FrontEnd/pages/LandingPage.html'));
 });
 
-app.listen(PORT, () => {
-  console.log(`MediVault server running on http://localhost:${PORT}`);
-  console.log(`Frontend available at http://localhost:${PORT}`);
-});
+function startServer(port, retriesLeft = 10) {
+  const server = app.listen(port, () => {
+    console.log(`MediVault server running on http://localhost:${port}`);
+    console.log(`Frontend available at http://localhost:${port}`);
+  });
+
+  server.on('error', (error) => {
+    if (error.code === 'EADDRINUSE' && retriesLeft > 0) {
+      const nextPort = port + 1;
+      console.warn(`Port ${port} is already in use, trying ${nextPort}...`);
+      setTimeout(() => startServer(nextPort, retriesLeft - 1), 0);
+      return;
+    }
+
+    console.error(`Failed to start server on port ${port}:`, error.message);
+    process.exit(1);
+  });
+}
+
+startServer(DEFAULT_PORT);
