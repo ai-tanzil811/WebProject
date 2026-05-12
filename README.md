@@ -1,100 +1,58 @@
-# MediVault - Setup Instructions
+# 🏥 MediVault: Local Dispensary Management System
 
-## Prerequisites
-- Node.js (v14+)
-- MySQL Server running on localhost
-- Database name: `medivault`
-- MySQL Username: `root`
-- MySQL Password: `12345678`
+## 🚀 Project Overview
+**MediVault** is a sophisticated inventory and ordering system tailored for local pharmacies or university health centers. It transitions from a standard e-commerce platform into a clinical safety tool through its advanced interaction logic.
 
-## Installation
+### 🌟 The Core Innovation: "The Twist"
+Unlike standard pharmacy apps, MediVault implements a **Drug Interaction Warning System**.
+* **Real-time Cart Validation:** Checks if medicines added to the current cart conflict with each other.
+* **Historical Check:** Cross-references the current cart against the user's **last 7 days of purchase history**.
+* **Safety Protocol:** Triggers a modal warning and blocks the checkout process if a "Severe" conflict is detected.
 
-1. **Install dependencies:**
-   ```bash
-   npm install
-   ```
+---
 
-2. **Setup Database:**
-   - Create database in MySQL:
-   ```sql
-   CREATE DATABASE medivault;
-   ```
-   - Run the database schema:
-   ```bash
-   mysql -u root -p12345678 medivault < Server/main_DB.sql
-   ```
+## 🛠 Tech Stack & Security
+* **Frontend:** HTML5, CSS3 (Flexbox/Grid), JavaScript (Vanilla).
+* **Backend:** Node.js & Express.js.
+* **Database:** MySQL (3rd Normal Form compliant).
+* **Security:** Bcryptjs hashing, Prepared Statements, and Session-based Auth.
 
-3. **Add Test Data:**
-   - First, generate a hashed password:
-   ```bash
-   node Server/utils/hashPassword.js
-   ```
-   - Copy the hashed password and insert test users:
-   ```sql
-   -- Example: Insert a test user
-   INSERT INTO Users (name, email, password_hash, nid, age) 
-   VALUES ('John Doe', 'user@example.com', 'YOUR_HASHED_PASSWORD', 'NID123456', 30);
+---
 
-   -- Example: Insert a test admin
-   INSERT INTO Admins (name, email, password_hash) 
-   VALUES ('Admin User', 'admin@example.com', 'YOUR_HASHED_PASSWORD');
-   ```
+## 📂 Project Structure & Navigation
 
-## Running the Server
+### 🗺️ Frontend Map
+| Page | Purpose |
+| :--- | :--- |
+| LandingPage.html | Entry point for all users. |
+| User_login.html | Access for patients/customers. |
+| Admin_login.html | Access for pharmacists/staff. |
+| Shopping.html | Medicine catalog with search and filters. |
+| Checkout.html | Order confirmation and conflict summary. |
+| Admin_dashboard.html | Overview of system stats and pending orders. |
 
-**Development (with auto-reload):**
-```bash
-npm run dev
-```
+---
 
-**Production:**
-```bash
-npm start
-```
+## 🧠 Deep Technical Details
 
-The server will run on `http://localhost:3000` by default, and will automatically try the next free port if `3000` is already in use.
+### 🧬 Database Schema (3NF)
+* **Medicines:** Core drug info (Generic name, Brand, Strength, Price).
+* **Inventory:** Tracks physical stock using Batch Numbers and Expiry Dates.
+* **DrugConflicts:** Mapping table for interactions with severity levels.
+* **Orders:** Maintains a record for the 7-day history lookup.
 
-## Features
-- User and Admin login pages
-- Session management with express-session
-- Password hashing with bcryptjs
-- MySQL database integration
-- RESTful API endpoints
+### 🔍 Interaction Logic Flow
+1. **Identify** all medicine IDs in the current cart.
+2. **Check** self-conflicts within the cart.
+3. **Query** orders from the last 7 days for that user.
+4. **Cross-reference** past items with new items.
+5. **Return** JSON conflict data to trigger the UI warning modal.
 
-## API Endpoints
+---
 
-### Authentication
-- `POST /api/auth/login` - Login with email and password
-- `POST /api/auth/logout` - Logout and destroy session
-- `GET /api/auth/status` - Check authentication status
-
-## Project Structure
-```
-WebProject/
-├── Server/
-│   ├── server.js              # Main server file
-│   ├── config/
-│   │   └── database.js        # Database connection pool
-│   ├── routes/
-│   │   └── auth.js            # Authentication routes
-│   ├── utils/
-│   │   └── hashPassword.js    # Password hashing utility
-│   └── main_DB.sql            # Database schema
-├── FrontEnd/
-│   ├── pages/
-│   │   ├── LandingPage.html
-│   │   ├── User_login.html
-│   │   └── Admin_login.html
-│   ├── script/
-│   │   └── login.js           # Login form handler
-│   └── Styles/
-│       ├── landingPage.css
-│       └── userLogin.css
-└── package.json
-```
-
-## Security Notes
-- Change the session secret in `Server/server.js` for production
-- Always use HTTPS in production
-- Keep your MySQL password secure
-- Hash passwords before storing in database
+## 👤 Developer Information
+* **Lead Developer:** Ashraful Islam Tanzil
+* **Institution:** United International University (UIU)
+* **Department:** Computer Science and Engineering (CSE)
+* **Student ID:** 0112230028
+* **Expertise:** Full-Stack Web Development (Node.js, Laravel, React), Machine Learning, and IoT.
