@@ -1,0 +1,175 @@
+-- MediVault Complete Database Schema
+-- Drop existing database and create fresh
+DROP DATABASE IF EXISTS medivault;
+CREATE DATABASE medivault;
+USE medivault;
+
+-- ==================== USERS TABLE ====================
+CREATE TABLE Users (
+  user_id INT AUTO_INCREMENT PRIMARY KEY,
+  name VARCHAR(255) NOT NULL,
+  email VARCHAR(255) UNIQUE NOT NULL,
+  password_hash VARCHAR(255) NOT NULL,
+  nid VARCHAR(50) UNIQUE NOT NULL,
+  age INT NOT NULL,
+  photo_image_path VARCHAR(500) NULL,
+  photo_image_type VARCHAR(50) NULL,
+  reset_code VARCHAR(6) NULL DEFAULT NULL,
+  reset_code_expiry DATETIME NULL DEFAULT NULL,
+  reset_token VARCHAR(255) NULL DEFAULT NULL,
+  created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
+  updated_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP,
+  INDEX idx_email (email),
+  INDEX idx_reset_token (reset_token),
+  INDEX idx_nid (nid)
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
+
+-- ==================== ADMINS TABLE ====================
+CREATE TABLE Admins (
+  admin_id INT AUTO_INCREMENT PRIMARY KEY,
+  name VARCHAR(255) NOT NULL,
+  email VARCHAR(255) UNIQUE NOT NULL,
+  password_hash VARCHAR(255) NOT NULL,
+  shop_banner_image_path VARCHAR(500) NULL,
+  shop_banner_image_type VARCHAR(50) NULL,
+  reset_code VARCHAR(6) NULL DEFAULT NULL,
+  reset_code_expiry DATETIME NULL DEFAULT NULL,
+  reset_token VARCHAR(255) NULL DEFAULT NULL,
+  created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
+  updated_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP,
+  INDEX idx_email (email),
+  INDEX idx_reset_token (reset_token)
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
+
+-- ==================== MEDICINES TABLE ====================
+CREATE TABLE Medicines (
+  medicine_id INT AUTO_INCREMENT PRIMARY KEY,
+  generic_name VARCHAR(255) NOT NULL,
+  brand_name VARCHAR(255) NOT NULL,
+  strength VARCHAR(100),
+  dosage_form VARCHAR(100),
+  manufacturer VARCHAR(255),
+  batch_number VARCHAR(100),
+  expiry_date DATE,
+  quantity INT DEFAULT 0,
+  price DECIMAL(10, 2),
+  is_restricted BOOLEAN DEFAULT FALSE,
+  description TEXT,
+  created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
+  updated_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP,
+  INDEX idx_generic_name (generic_name),
+  INDEX idx_brand_name (brand_name),
+  INDEX idx_expiry_date (expiry_date)
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
+
+-- ==================== DRUG CONFLICTS TABLE ====================
+CREATE TABLE DrugConflicts (
+  conflict_id INT AUTO_INCREMENT PRIMARY KEY,
+  medicine_id_1 INT NOT NULL,
+  medicine_id_2 INT NOT NULL,
+  conflict_level ENUM('mild', 'moderate', 'severe') DEFAULT 'moderate',
+  description TEXT,
+  recommendation TEXT,
+  created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
+  FOREIGN KEY (medicine_id_1) REFERENCES Medicines(medicine_id) ON DELETE CASCADE,
+  FOREIGN KEY (medicine_id_2) REFERENCES Medicines(medicine_id) ON DELETE CASCADE,
+  UNIQUE KEY unique_conflict (medicine_id_1, medicine_id_2),
+  INDEX idx_conflict_level (conflict_level)
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
+
+-- ==================== ORDER STATUSES TABLE ====================
+CREATE TABLE OrderStatuses (
+  status_id INT AUTO_INCREMENT PRIMARY KEY,
+  status_name VARCHAR(50) UNIQUE NOT NULL,
+  description TEXT
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
+
+-- Insert default order statuses
+INSERT INTO OrderStatuses (status_name, description) VALUES
+('pending', 'Order is pending confirmation'),
+('confirmed', 'Order has been confirmed'),
+('processing', 'Order is being processed'),
+('shipped', 'Order has been shipped'),
+('delivered', 'Order has been delivered'),
+('cancelled', 'Order has been cancelled'),
+('failed', 'Order processing failed');
+
+-- ==================== ORDERS TABLE ====================
+CREATE TABLE Orders (
+  order_id INT AUTO_INCREMENT PRIMARY KEY,
+  user_id INT NOT NULL,
+  order_date TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
+  total_amount DECIMAL(12, 2),
+  status_id INT NOT NULL DEFAULT 1,
+  admin_id INT NULL,
+  notes TEXT,
+  delivery_date DATETIME NULL,
+  created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
+  updated_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP,
+  FOREIGN KEY (user_id) REFERENCES Users(user_id) ON DELETE CASCADE,
+  FOREIGN KEY (status_id) REFERENCES OrderStatuses(status_id),
+  FOREIGN KEY (admin_id) REFERENCES Admins(admin_id) ON DELETE SET NULL,
+  INDEX idx_user_id (user_id),
+  INDEX idx_order_date (order_date),
+  INDEX idx_status_id (status_id)
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
+
+-- ==================== ORDER ITEMS TABLE ====================
+CREATE TABLE OrderItems (
+  item_id INT AUTO_INCREMENT PRIMARY KEY,
+  order_id INT NOT NULL,
+  medicine_id INT NOT NULL,
+  quantity INT NOT NULL,
+  unit_price DECIMAL(10, 2),
+  subtotal DECIMAL(12, 2),
+  created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
+  FOREIGN KEY (order_id) REFERENCES Orders(order_id) ON DELETE CASCADE,
+  FOREIGN KEY (medicine_id) REFERENCES Medicines(medicine_id) ON DELETE RESTRICT,
+  INDEX idx_order_id (order_id),
+  INDEX idx_medicine_id (medicine_id)
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
+
+-- ==================== PRESCRIPTION REVIEWS TABLE ====================
+CREATE TABLE PrescriptionReviews (
+  review_id INT AUTO_INCREMENT PRIMARY KEY,
+  order_id INT NOT NULL,
+  admin_id INT NOT NULL,
+  review_status ENUM('pending', 'approved', 'rejected') DEFAULT 'pending',
+  review_notes TEXT,
+  conflict_detected BOOLEAN DEFAULT FALSE,
+  conflict_details TEXT,
+  reviewed_at DATETIME NULL,
+  created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
+  updated_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP,
+  FOREIGN KEY (order_id) REFERENCES Orders(order_id) ON DELETE CASCADE,
+  FOREIGN KEY (admin_id) REFERENCES Admins(admin_id) ON DELETE CASCADE,
+  INDEX idx_order_id (order_id),
+  INDEX idx_review_status (review_status),
+  INDEX idx_admin_id (admin_id)
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
+
+-- ==================== ACTIVITY LOGS TABLE ====================
+CREATE TABLE ActivityLogs (
+  log_id INT AUTO_INCREMENT PRIMARY KEY,
+  user_id INT NULL,
+  admin_id INT NULL,
+  action VARCHAR(255) NOT NULL,
+  entity_type VARCHAR(100),
+  entity_id INT,
+  old_value TEXT,
+  new_value TEXT,
+  ip_address VARCHAR(45),
+  user_agent TEXT,
+  created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
+  FOREIGN KEY (user_id) REFERENCES Users(user_id) ON DELETE SET NULL,
+  FOREIGN KEY (admin_id) REFERENCES Admins(admin_id) ON DELETE SET NULL,
+  INDEX idx_created_at (created_at),
+  INDEX idx_user_id (user_id),
+  INDEX idx_admin_id (admin_id),
+  INDEX idx_action (action)
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
+
+-- ==================== VERIFY TABLES ====================
+SHOW TABLES;
+SHOW COLUMNS FROM Users;
+SHOW COLUMNS FROM Admins;
