@@ -4,6 +4,8 @@ const crypto = require('crypto');
 const nodemailer = require('nodemailer');
 const pool = require('../config/database');
 const multer = require('multer');
+const fs = require('fs');
+const path = require('path');
 
 const router = express.Router();
 
@@ -772,3 +774,92 @@ router.get('/profile', async (req, res) => {
 });
 
 module.exports = router;
+
+// PATCH /profile - update profile (name, nid, age, optional photo)
+// Uses memory multer and writes file into FrontEnd/uploads/users so static serving can expose it
+router.patch('/profile', upload.single('photo'), async (req, res) => {
+  try {
+    if (!req.session || !req.session.user) {
+      return res.status(401).json({ success: false, message: 'Not authenticated' });
+    }
+
+    const userId = req.session.user.id;
+    const role = req.session.user.role === 'admin' ? 'Admins' : 'Users';
+    const { name, nid, age } = req.body;
+
+    let photoPath = null;
+    let photoType = null;
+
+    if (req.file) {
+      // Ensure upload dir exists inside FrontEnd so express.static serves it
+      const uploadsDir = path.join(__dirname, '..', 'FrontEnd', 'uploads', role === 'Admins' ? 'admins' : 'users');
+      fs.mkdirSync(uploadsDir, { recursive: true });
+      const safeName = req.file.originalname.replace(/[^a-zA-Z0-9.\-_]/g, '_');
+      const filename = `${Date.now()}-${safeName}`;
+      const destPath = path.join(uploadsDir, filename);
+      fs.writeFileSync(destPath, req.file.buffer);
+      photoPath = `/uploads/${role === 'Admins' ? 'admins' : 'users'}/${filename}`;
+      photoType = req.file.mimetype;
+    }
+
+    const connection = await pool.getConnection();
+    try {
+      if (role === 'Admins') {
+        const fields = [];
+        const values = [];
+        if (name) { fields.push('name = ?'); values.push(name); }
+        if (photoPath) { fields.push('shop_banner_image_path = ?'); values.push(photoPath); }
+        if (photoType) { fields.push('shop_banner_image_type = ?'); values.push(photoType); }
+        if (fields.length === 0) {
+          return res.json({ success: true, message: 'No changes' });
+        }
+        values.push(userId);
+        const sql = `UPDATE Admins SET ${fields.join(', ')} WHERE admin_id = ?`;
+        await connection.query(sql, values);
+      } else {
+        const fields = [];
+        const values = [];
+        if (name) { fields.push('name = ?'); values.push(name); }
+        if (nid) { fields.push('nid = ?'); values.push(nid); }
+        if (age) { fields.push('age = ?'); values.push(age); }
+        if (photoPath) { fields.push('photo_image_path = ?'); values.push(photoPath); }
+        if (photoType) { fields.push('photo_image_type = ?'); values.push(photoType); }
+        if (fields.length === 0) {
+          return res.json({ success: true, message: 'No changes' });
+        }
+        values.push(userId);
+        const sql = `UPDATE Users SET ${fields.join(', ')} WHERE user_id = ?`;
+        await connection.query(sql, values);
+      }
+
+      // Return updated profile
+      // Reuse SELECT logic similar to GET /profile
+      let query;
+      if (role === 'Admins') {
+        query = 'SELECT admin_id AS id, name, email, shop_banner_image_path AS photo_image_path, shop_banner_image_type AS photo_image_type, created_at FROM Admins WHERE admin_id = ?';
+      } else {
+        query = 'SELECT user_id AS id, name, email, nid, age, photo_image_path, photo_image_type, created_at FROM Users WHERE user_id = ?';
+      }
+      const [rows] = await connection.query(query, [userId]);
+      const user = rows[0];
+      const profile = {
+        id: user.id,
+        name: user.name,
+        email: user.email,
+        role: req.session.user.role,
+        nid: user.nid || null,
+        age: user.age || null,
+        photo_image_path: user.photo_image_path || null,
+        photo_image_type: user.photo_image_type || null,
+        created_at: user.created_at || null
+      };
+
+      res.json({ success: true, user: profile, message: 'Profile updated' });
+    } finally {
+      connection.release();
+    }
+  } catch (error) {
+    console.error('Profile update error:', error);
+    res.status(500).json({ success: false, message: 'Server error while updating profile' });
+  }
+});

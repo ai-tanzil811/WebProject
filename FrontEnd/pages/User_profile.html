@@ -51,6 +51,38 @@
         </div>
       </div>
     </section>
+    <section class="card" style="margin-top:1rem;">
+      <h2>Account Settings</h2>
+      <div style="display:flex;gap:.6rem;align-items:center;margin-top:.6rem;">
+        <button id="btn-edit" class="btn-back" style="background:var(--primary);">Edit Profile</button>
+        <span id="edit-status" style="color:var(--gray-600);"></span>
+      </div>
+
+      <form id="profile-form" style="margin-top:1rem;display:none;" enctype="multipart/form-data">
+        <div class="profile-grid">
+          <div class="profile-row">
+            <span class="label">Name</span>
+            <input class="value" id="input-name" name="name" style="width:100%;padding:.5rem;border-radius:6px;border:1px solid var(--gray-200);" />
+          </div>
+          <div class="profile-row">
+            <span class="label">National ID</span>
+            <input class="value" id="input-nid" name="nid" style="width:100%;padding:.5rem;border-radius:6px;border:1px solid var(--gray-200);" />
+          </div>
+          <div class="profile-row">
+            <span class="label">Age</span>
+            <input class="value" id="input-age" name="age" type="number" min="0" style="width:100%;padding:.5rem;border-radius:6px;border:1px solid var(--gray-200);" />
+          </div>
+          <div class="profile-row">
+            <span class="label">Photo</span>
+            <input id="input-photo" name="photo" type="file" accept="image/*" />
+          </div>
+          <div style="display:flex;gap:.5rem;">
+            <button id="btn-save" type="button" class="btn-back">Save</button>
+            <button id="btn-cancel" type="button" class="btn-back" style="background:var(--gray-300);color:var(--text-primary);">Cancel</button>
+          </div>
+        </div>
+      </form>
+    </section>
   </main>
   <script src="../script/profile.js"></script>
 </body>

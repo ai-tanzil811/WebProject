@@ -1,0 +1,40 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>MediVault | Admin Profile</title>
+  <link rel="stylesheet" href="../Styles/adminNavbar.css" />
+  <link rel="stylesheet" href="../Styles/adminDashboard.css" />
+</head>
+<body class="admin-page" data-active-nav="dashboard">
+  <header class="app-header">
+    <div data-include="admin-navbar"></div>
+  </header>
+
+  <main class="page" style="max-width:960px;margin:2rem auto;padding:1rem;">
+    <section class="card">
+      <h1>Admin Profile</h1>
+      <p class="subtitle">Manage your admin account.</p>
+
+      <div class="profile-grid" style="margin-top:1rem;">
+        <div class="profile-row">
+          <span class="label">Name</span>
+          <span class="value" id="profile-name">—</span>
+        </div>
+        <div class="profile-row">
+          <span class="label">Email</span>
+          <span class="value" id="profile-email">—</span>
+        </div>
+        <div class="profile-row">
+          <span class="label">Shop Banner</span>
+          <span class="value"><img id="profile-photo" src="/assets/default-user.png" alt="banner" style="height:48px;border-radius:6px;"/></span>
+        </div>
+      </div>
+    </section>
+  </main>
+
+  <script src="../script/profile.js"></script>
+  <script src="../script/adminNavbar.js"></script>
+</body>
+</html>

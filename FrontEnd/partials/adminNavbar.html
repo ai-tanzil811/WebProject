@@ -12,7 +12,17 @@
       <span class="search-icon">S</span>
       <input type="search" placeholder="Search records..." aria-label="Search records" data-nav-search />
     </label>
-    <button class="nav-icon" type="button" aria-label="Notifications">N</button>
-    <div class="avatar" aria-label="Admin profile">A</div>
+    <div class="dropdown" id="admin-dropdown">
+      <button class="dropdown-toggle" id="admin-dropdown-toggle" aria-haspopup="true" aria-expanded="false">
+        <span class="avatar" id="admin-avatar">A</span>
+        <span class="caret">▾</span>
+      </button>
+      <div class="dropdown-menu" id="admin-dropdown-menu" role="menu" aria-hidden="true">
+        <button class="dropdown-item" data-action="notifications">Notifications</button>
+        <button class="dropdown-item" data-action="profile">Profile</button>
+        <div class="dropdown-divider"></div>
+        <button class="dropdown-item" data-action="logout">Logout</button>
+      </div>
+    </div>
   </div>
 </nav>
