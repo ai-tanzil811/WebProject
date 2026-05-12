@@ -1,0 +1,136 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>MediVault | User Registration</title>
+
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700;800&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="../Styles/userRegister.css">
+</head>
+
+<body class="auth-page">
+
+  <main class="auth-shell" data-default-role="user">
+    <section class="auth-hero">
+      <a href="/" style="position: absolute; top: 20px; left: 20px; color: #dbeafe; text-decoration: none; font-size: 14px;">← Back to Home</a>
+      <div class="auth-brand">MediVault</div>
+      <span class="auth-chip">User Portal</span>
+      <h1>Join the clinical network</h1>
+      <p>
+        Create your secure account to access our medication management system with real-time interaction safety protocols.
+      </p>
+
+      <div class="auth-points">
+        <article class="auth-point">
+          <span>01</span>
+          <div>
+            <h3>Verified Identity</h3>
+            <p>Your NID and personal information are securely stored and verified.</p>
+          </div>
+        </article>
+
+        <article class="auth-point">
+          <span>02</span>
+          <div>
+            <h3>Safe Access</h3>
+            <p>Strong password encryption protects your account from unauthorized access.</p>
+          </div>
+        </article>
+
+        <article class="auth-point">
+          <span>03</span>
+          <div>
+            <h3>Quick Setup</h3>
+            <p>Complete registration in minutes and start using MediVault immediately.</p>
+          </div>
+        </article>
+      </div>
+    </section>
+
+    <section class="auth-panel">
+      <div class="auth-header">
+        <div>
+          <p class="auth-eyebrow">User registration</p>
+          <h2>Create Account</h2>
+          <p class="subtitle">
+            Fill in your details to create a new user account and access the clinical workspace.
+          </p>
+        </div>
+        <p class="feedback" data-feedback hidden></p>
+        <p class="success-message" data-success hidden></p>
+      </div>
+
+      <form class="auth-form" id="userRegisterForm" novalidate>
+        <div class="form-row">
+          <label class="form-field">
+            <span>Full Name</span>
+            <input type="text" name="name" placeholder="John Doe" required>
+          </label>
+
+          <label class="form-field">
+            <span>National ID (NID)</span>
+            <input type="text" name="nid" placeholder="1234567890" required>
+          </label>
+        </div>
+
+        <label class="form-field form-row full">
+          <span>Email Address</span>
+          <input type="email" name="email" placeholder="you@example.com" autocomplete="email" required>
+        </label>
+
+        <div class="form-row">
+          <label class="form-field">
+            <span>Age</span>
+            <input type="number" name="age" placeholder="25" min="18" max="120" required>
+          </label>
+
+          <label class="form-field">
+            <span>Password</span>
+            <div class="password-field">
+              <input type="password" name="password" placeholder="Create a strong password" autocomplete="new-password" required>
+              <button type="button" class="password-toggle" data-password-toggle>Show</button>
+            </div>
+          </label>
+        </div>
+
+        <label class="form-field form-row full">
+          <span>Confirm Password</span>
+          <div class="password-field">
+            <input type="password" name="confirmPassword" placeholder="Confirm your password" autocomplete="new-password" required>
+            <button type="button" class="password-toggle" data-confirm-toggle>Show</button>
+          </div>
+        </label>
+
+        <label class="form-field form-row full">
+          <span>Profile Photo (Optional)</span>
+          <div class="file-input-wrapper">
+            <label class="file-input-label">
+              <input type="file" name="photo" accept="image/*">
+              <span>Click to upload or drag and drop your profile photo</span>
+            </label>
+            <span class="file-name" data-file-name hidden></span>
+          </div>
+        </label>
+
+        <div class="extra">
+          <label class="remember">
+            <input type="checkbox" name="terms" required>
+            I agree to the Terms & Conditions
+          </label>
+        </div>
+
+        <button class="btn" type="submit" data-submit>Create Account</button>
+      </form>
+
+      <p class="footer-text">
+        Already have an account? <a href="/pages/User_login.html" style="color: var(--primary); text-decoration: underline;">Sign in here</a>
+      </p>
+    </section>
+  </main>
+
+  <script src="../script/register.js"></script>
+</body>
+</html>

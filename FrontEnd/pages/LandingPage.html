@@ -26,13 +26,25 @@
 
       <div class="nav-buttons">
 
-        <a href="#" class="signin">
-          Sign In
-        </a>
+        <div class="nav-dropdown">
+          <button class="signin dropdown-toggle" id="loginDropdown">
+            Sign In
+          </button>
+          <div class="dropdown-menu" id="loginMenu">
+            <a href="/pages/User_login.html">User Login</a>
+            <a href="/pages/Admin_login.html">Admin Login</a>
+          </div>
+        </div>
 
-        <a href="#" class="register-btn">
-          Register
-        </a>
+        <div class="nav-dropdown">
+          <button class="register-btn dropdown-toggle" id="registerDropdown">
+            Register
+          </button>
+          <div class="dropdown-menu" id="registerMenu">
+            <a href="/pages/User_register.html">User Register</a>
+            <a href="/pages/Admin_register.html">Admin Register</a>
+          </div>
+        </div>
 
       </div>
 
@@ -63,11 +75,11 @@
 
         <div class="hero-buttons">
 
-          <a href="#" class="user-btn">
-            User Login →
+          <a href="/pages/User_login.html" class="user-btn">
+            User Login
           </a>
 
-          <a href="#" class="admin-btn">
+          <a href="/pages/Admin_login.html" class="admin-btn">
             Admin Login
           </a>
 
@@ -286,5 +298,32 @@
     © 2026 MediVault — Secure Clinical Infrastructure
   </footer>
 <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.8/dist/js/bootstrap.bundle.min.js" integrity="sha384-FKyoEForCGlyvwx9Hj09JcYn3nv7wiPVlz7YYwJrWVcXK/BmnVDxM+D2scQbITxI" crossorigin="anonymous"></script>
+<script>
+  // Login dropdown
+  const loginDropdown = document.getElementById('loginDropdown');
+  const loginMenu = document.getElementById('loginMenu');
+
+  loginDropdown.addEventListener('click', function () {
+    loginMenu.style.display = loginMenu.style.display === 'flex' ? 'none' : 'flex';
+    registerMenu.style.display = 'none';
+  });
+
+  // Register dropdown
+  const registerDropdown = document.getElementById('registerDropdown');
+  const registerMenu = document.getElementById('registerMenu');
+
+  registerDropdown.addEventListener('click', function () {
+    registerMenu.style.display = registerMenu.style.display === 'flex' ? 'none' : 'flex';
+    loginMenu.style.display = 'none';
+  });
+
+  // Close dropdowns when clicking outside
+  document.addEventListener('click', function (e) {
+    if (!e.target.closest('.nav-dropdown')) {
+      loginMenu.style.display = 'none';
+      registerMenu.style.display = 'none';
+    }
+  });
+</script>
 </body>
 </html>
