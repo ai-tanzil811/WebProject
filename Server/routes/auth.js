@@ -7,14 +7,32 @@ const multer = require('multer');
 
 const router = express.Router();
 
-// Email transporter
-const transporter = nodemailer.createTransport({
-  service: process.env.EMAIL_SERVICE || 'gmail',
-  auth: {
-    user: process.env.EMAIL_USER,
-    pass: process.env.EMAIL_PASSWORD
-  }
-});
+// ========== EMAIL CONFIGURATION ==========
+let transporter = null;
+
+// Initialize email transporter with error handling
+try {
+  transporter = nodemailer.createTransport({
+    service: process.env.EMAIL_SERVICE || 'gmail',
+    auth: {
+      user: process.env.EMAIL_USER,
+      pass: process.env.EMAIL_PASSWORD
+    }
+  });
+
+  // Verify transporter configuration on startup
+  transporter.verify((error, success) => {
+    if (error) {
+      console.error('❌ Email Transporter Error:', error.message);
+      console.warn('⚠️ Password reset via email will not work until email is configured correctly');
+    } else {
+      console.log('✅ Email Transporter Ready:', process.env.EMAIL_USER);
+    }
+  });
+} catch (error) {
+  console.error('❌ Failed to initialize email transporter:', error.message);
+  transporter = null;
+}
 
 function generateOTP() {
   return Math.floor(100000 + Math.random() * 900000).toString();
@@ -325,7 +343,7 @@ router.post('/login', async (req, res) => {
       res.json({
         success: true,
         message: 'Login successful',
-        redirect: login_role === 'admin' ? '/admin/Admin_dashboard' : '/user/Shopping.html'
+        redirect: login_role === 'admin' ? '/pages/Admin_dashboard.html' : '/pages/Shopping.html'
       });
     } finally {
       connection.release();
@@ -515,7 +533,6 @@ router.post('/request-password-reset', async (req, res) => {
 
       // Update reset code in database
       const table = userType === 'user' ? 'Users' : 'Admins';
-      const idColumn = userType === 'user' ? 'user_id' : 'admin_id';
 
       await connection.query(
         `UPDATE ${table} SET reset_code = ?, reset_code_expiry = ?, reset_token = ? WHERE email = ?`,
@@ -526,10 +543,24 @@ router.post('/request-password-reset', async (req, res) => {
       const user = userType === 'user' ? users[0] : admins[0];
       const emailHTML = generateOTPEmailTemplate(user.name, resetCode);
 
+      // Check if transporter is available
+      if (!transporter) {
+        console.warn('⚠️ Email service not configured. Reset code:', resetCode);
+        return res.status(500).json({
+          success: false,
+          message: 'Email service is not configured. Please contact support. (Code: ' + resetCode + ')'
+        });
+      }
+
+      // Send email with error handling
       await transporter.sendMail({
+        from: process.env.EMAIL_USER,
         to: email,
         subject: '🔐 Your MediVault Password Reset Code',
         html: emailHTML
+      }).catch(emailError => {
+        console.error('❌ Email sending failed:', emailError.message);
+        throw new Error('Failed to send reset code: ' + emailError.message);
       });
 
       res.json({
@@ -545,7 +576,7 @@ router.post('/request-password-reset', async (req, res) => {
     console.error('Password reset request error:', error);
     res.status(500).json({
       success: false,
-      message: 'Server error during reset request'
+      message: error.message || 'Server error during reset request'
     });
   }
 });

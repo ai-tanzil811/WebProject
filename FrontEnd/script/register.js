@@ -1,186 +1,208 @@
-// User Registration Form
-const userRegisterForm = document.getElementById('userRegisterForm');
-if (userRegisterForm) {
-  setupFormHandler(userRegisterForm, 'user');
+/**
+ * MediVault Registration Form Handler
+ * Manages user and admin registration with validation and file uploads
+ */
+
+document.addEventListener('DOMContentLoaded', initializeRegistration);
+
+function initializeRegistration() {
+  const userForm = document.getElementById('userRegisterForm');
+  const adminForm = document.getElementById('adminRegisterForm');
+
+  if (userForm) setupFormHandler(userForm, 'user');
+  if (adminForm) setupFormHandler(adminForm, 'admin');
 }
 
-// Admin Registration Form
-const adminRegisterForm = document.getElementById('adminRegisterForm');
-if (adminRegisterForm) {
-  setupFormHandler(adminRegisterForm, 'admin');
-}
-
-function setupFormHandler(form, type) {
-  const feedback = form.closest('.auth-panel').querySelector('[data-feedback]');
-  const successMsg = form.closest('.auth-panel').querySelector('[data-success]');
+/**
+ * Setup all event listeners for a registration form
+ */
+function setupFormHandler(form, userType) {
+  const panel = form.closest('.auth-panel');
+  const feedback = panel.querySelector('[data-feedback]');
+  const successMsg = panel.querySelector('[data-success]');
   const submitBtn = form.querySelector('[data-submit]');
 
-  // Password toggle for password field
-  const passwordToggle = form.querySelector('[data-password-toggle]');
-  if (passwordToggle) {
-    passwordToggle.addEventListener('click', function (e) {
-      e.preventDefault();
-      const passwordInput = form.querySelector('input[name="password"]');
-      if (passwordInput.type === 'password') {
-        passwordInput.type = 'text';
-        passwordToggle.textContent = 'Hide';
-      } else {
-        passwordInput.type = 'password';
-        passwordToggle.textContent = 'Show';
-      }
-    });
-  }
+  // Setup password visibility toggles
+  setupPasswordToggle(form, '[data-password-toggle]', 'input[name="password"]');
+  setupPasswordToggle(form, '[data-confirm-toggle]', 'input[name="confirmPassword"]');
 
-  // Password toggle for confirm password field
-  const confirmToggle = form.querySelector('[data-confirm-toggle]');
-  if (confirmToggle) {
-    confirmToggle.addEventListener('click', function (e) {
-      e.preventDefault();
-      const confirmInput = form.querySelector('input[name="confirmPassword"]');
-      if (confirmInput.type === 'password') {
-        confirmInput.type = 'text';
-        confirmToggle.textContent = 'Hide';
-      } else {
-        confirmInput.type = 'password';
-        confirmToggle.textContent = 'Show';
-      }
-    });
-  }
-
-  // File input handlers
+  // Setup file input handlers
   const photoInput = form.querySelector('input[name="photo"]');
-  if (photoInput) {
-    setupFileInput(photoInput);
-  }
-
   const shopBannerInput = form.querySelector('input[name="shopBanner"]');
-  if (shopBannerInput) {
-    setupFileInput(shopBannerInput);
-  }
 
-  // Form submission
-  form.addEventListener('submit', function (e) {
+  if (photoInput) setupFileInput(photoInput);
+  if (shopBannerInput) setupFileInput(shopBannerInput);
+
+  // Setup form submission
+  form.addEventListener('submit', e => handleRegistration(e, form, userType, submitBtn, feedback, successMsg));
+}
+
+/**
+ * Setup password visibility toggle
+ */
+function setupPasswordToggle(form, toggleSelector, inputSelector) {
+  const toggle = form.querySelector(toggleSelector);
+  if (!toggle) return;
+
+  toggle.addEventListener('click', e => {
     e.preventDefault();
-
-    // Hide previous messages
-    if (feedback) feedback.hidden = true;
-    if (successMsg) successMsg.hidden = true;
-
-    // Get form values
-    const email = form.querySelector('input[name="email"]').value;
-    const password = form.querySelector('input[name="password"]').value;
-    const confirmPassword = form.querySelector('input[name="confirmPassword"]').value;
-    const terms = form.querySelector('input[name="terms"]').checked;
-
-    // Validate
-    if (!email || !password || !confirmPassword) {
-      showError(feedback, 'Please fill in all required fields.');
-      return;
-    }
-
-    if (password !== confirmPassword) {
-      showError(feedback, 'Passwords do not match.');
-      return;
-    }
-
-    if (password.length < 8) {
-      showError(feedback, 'Password must be at least 8 characters long.');
-      return;
-    }
-
-    if (!terms) {
-      showError(feedback, 'You must agree to the terms and conditions.');
-      return;
-    }
-
-    // Submit form
-    submitForm(form, type, submitBtn, feedback, successMsg);
+    const input = form.querySelector(inputSelector);
+    const isPassword = input.type === 'password';
+    input.type = isPassword ? 'text' : 'password';
+    toggle.textContent = isPassword ? 'Hide' : 'Show';
   });
 }
 
+/**
+ * Setup file input with drag-and-drop support
+ */
 function setupFileInput(fileInput) {
-  const fileInputWrapper = fileInput.closest('.file-input-wrapper');
-  const fileLabel = fileInputWrapper.querySelector('.file-input-label');
-  const fileName = fileInputWrapper.querySelector('[data-file-name]');
+  const wrapper = fileInput.closest('.file-input-wrapper');
+  if (!wrapper) return;
 
-  // File change event
-  fileInput.addEventListener('change', function () {
+  const label = wrapper.querySelector('.file-input-label');
+  const fileName = wrapper.querySelector('[data-file-name]');
+
+  // File selection event
+  fileInput.addEventListener('change', () => {
     if (fileInput.files.length > 0) {
-      fileName.textContent = '✓ Selected: ' + fileInput.files[0].name;
+      fileName.textContent = `✓ Selected: ${fileInput.files[0].name}`;
       fileName.hidden = false;
     }
   });
 
   // Drag and drop events
-  fileLabel.addEventListener('dragenter', function (e) {
-    e.preventDefault();
-    e.stopPropagation();
-    fileLabel.style.borderColor = 'rgba(29, 78, 216, 0.8)';
-    fileLabel.style.background = 'var(--primary-soft)';
-  });
+  const dragEvents = {
+    dragenter: () => updateFileInputStyle(label, true),
+    dragover: e => e.preventDefault(),
+    dragleave: () => updateFileInputStyle(label, false),
+    drop: e => handleFileDrop(e, fileInput, label)
+  };
 
-  fileLabel.addEventListener('dragover', function (e) {
-    e.preventDefault();
-    e.stopPropagation();
-  });
-
-  fileLabel.addEventListener('dragleave', function (e) {
-    e.preventDefault();
-    e.stopPropagation();
-    fileLabel.style.borderColor = '';
-    fileLabel.style.background = '';
-  });
-
-  fileLabel.addEventListener('drop', function (e) {
-    e.preventDefault();
-    e.stopPropagation();
-    fileLabel.style.borderColor = '';
-    fileLabel.style.background = '';
-
-    if (e.dataTransfer.files.length > 0) {
-      fileInput.files = e.dataTransfer.files;
-      const event = new Event('change', { bubbles: true });
-      fileInput.dispatchEvent(event);
-    }
+  Object.entries(dragEvents).forEach(([event, handler]) => {
+    label.addEventListener(event, handler);
   });
 }
 
-async function submitForm(form, type, submitBtn, feedback, successMsg) {
-  const endpoint = type === 'admin' ? '/api/auth/register-admin' : '/api/auth/register-user';
+/**
+ * Update file input styling on drag
+ */
+function updateFileInputStyle(label, isDragging) {
+  if (isDragging) {
+    label.style.borderColor = 'rgba(29, 78, 216, 0.8)';
+    label.style.background = 'var(--primary-soft)';
+  } else {
+    label.style.borderColor = '';
+    label.style.background = '';
+  }
+}
+
+/**
+ * Handle file drop
+ */
+function handleFileDrop(e, fileInput, label) {
+  e.preventDefault();
+  e.stopPropagation();
+  updateFileInputStyle(label, false);
+
+  if (e.dataTransfer.files.length > 0) {
+    fileInput.files = e.dataTransfer.files;
+    fileInput.dispatchEvent(new Event('change', { bubbles: true }));
+  }
+}
+
+/**
+ * Validate registration form inputs
+ */
+function validateRegistration(form, feedback) {
+  const email = form.querySelector('input[name="email"]').value;
+  const password = form.querySelector('input[name="password"]').value;
+  const confirmPassword = form.querySelector('input[name="confirmPassword"]').value;
+  const terms = form.querySelector('input[name="terms"]').checked;
+
+  // Check required fields
+  if (!email || !password || !confirmPassword) {
+    showError(feedback, 'Please fill in all required fields.');
+    return false;
+  }
+
+  // Check password match
+  if (password !== confirmPassword) {
+    showError(feedback, 'Passwords do not match.');
+    return false;
+  }
+
+  // Check password length
+  if (password.length < 8) {
+    showError(feedback, 'Password must be at least 8 characters long.');
+    return false;
+  }
+
+  // Check terms agreement
+  if (!terms) {
+    showError(feedback, 'You must agree to the terms and conditions.');
+    return false;
+  }
+
+  return true;
+}
+
+/**
+ * Handle registration form submission
+ */
+async function handleRegistration(e, form, userType, submitBtn, feedback, successMsg) {
+  e.preventDefault();
+
+  // Clear previous messages
+  clearMessages(feedback, successMsg);
+
+  // Validate form
+  if (!validateRegistration(form, feedback)) {
+    return;
+  }
 
   try {
+    // Disable submit button
     submitBtn.disabled = true;
-    submitBtn.textContent = type === 'admin' ? 'Creating admin account...' : 'Creating account...';
+    const originalText = submitBtn.textContent;
+    submitBtn.textContent = userType === 'admin' ? 'Creating admin account...' : 'Creating account...';
 
-    const formData = new FormData(form);
+    const endpoint = userType === 'admin' ? '/api/auth/register-admin' : '/api/auth/register-user';
+
     const response = await fetch(endpoint, {
       method: 'POST',
-      body: formData,
+      body: new FormData(form)
     });
 
     const data = await response.json();
 
-    if (data.success) {
-      const message = data.message || 'Account created successfully! Redirecting to login...';
-      showSuccess(successMsg, message);
-      form.reset();
-
-      setTimeout(() => {
-        const redirectUrl = type === 'admin' ? '/pages/Admin_login.html' : '/pages/User_login.html';
-        window.location.href = redirectUrl;
-      }, 2000);
-    } else {
+    if (!response.ok || !data.success) {
       showError(feedback, data.message || 'Registration failed. Please try again.');
+      return;
     }
+
+    // Success
+    showSuccess(successMsg, data.message || 'Account created successfully! Redirecting to login...');
+    form.reset();
+
+    // Redirect after 2 seconds
+    setTimeout(() => {
+      const redirectUrl = userType === 'admin' ? '/pages/Admin_login.html' : '/pages/User_login.html';
+      window.location.href = redirectUrl;
+    }, 2000);
+
   } catch (error) {
     console.error('Registration error:', error);
-    showError(feedback, 'An error occurred during registration. Please try again.');
+    showError(feedback, 'Network error. Please check your connection and try again.');
   } finally {
     submitBtn.disabled = false;
-    submitBtn.textContent = type === 'admin' ? 'Create Admin Account' : 'Create Account';
+    submitBtn.textContent = userType === 'admin' ? 'Create Admin Account' : 'Create Account';
   }
 }
 
+/**
+ * Display error message
+ */
 function showError(element, message) {
   if (element) {
     element.hidden = false;
@@ -188,9 +210,21 @@ function showError(element, message) {
   }
 }
 
+/**
+ * Display success message
+ */
 function showSuccess(element, message) {
   if (element) {
     element.hidden = false;
     element.textContent = message;
   }
 }
+
+/**
+ * Clear all messages
+ */
+function clearMessages(feedback, successMsg) {
+  if (feedback) feedback.hidden = true;
+  if (successMsg) successMsg.hidden = true;
+}
+

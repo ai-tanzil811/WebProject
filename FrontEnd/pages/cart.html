@@ -1,0 +1,89 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Pharmacy Cart</title>
+    <link rel="stylesheet" href="new.css">
+</head>
+<body>
+
+<div class="cart-container">
+    <!-- Header -->
+    <div class="cart-header">
+        <h2>My Cart</h2>
+        <span class="item-count">2 Items</span>
+    </div>
+
+    <!-- Item 1 -->
+    <div class="cart-item">
+        <div class="item-icon green-bg">💊</div>
+        <div class="item-details">
+            <div class="item-name">Amoxicillin 500mg</div>
+            <div class="item-meta">Qty: 1 • ৳35</div>
+        </div>
+        <div class="close-btn">&times;</div>
+    </div>
+
+    <!-- Item 2 with Warning -->
+    <div class="warning-container">
+        <div class="cart-item no-bg">
+            <div class="item-icon red-bg">💊</div>
+            <div class="item-details">
+                <div class="item-name">Warfarin 5mg</div>
+                <div class="item-meta">Qty: 1 • ৳18</div>
+            </div>
+            <div class="close-btn">&times;</div>
+        </div>
+        <div class="interaction-warning">
+            <strong>⚠️ INTERACTION WARNING</strong>
+            <p>Conflicts with Aspirin (purchased 3 days ago). Increases bleeding risk.</p>
+        </div>
+    </div>
+
+    <!-- Restricted Banner -->
+    <div class="restricted-banner">
+        <div class="banner-icon">⚠️</div>
+        <div class="banner-text">
+            <strong>RESTRICTED DRUGS</strong>
+            <span>CLINICAL SAFETY PROTOCOL ACTUATED</span>
+        </div>
+    </div>
+
+    <!-- Upload Section -->
+    <div class="upload-section">
+        <h3>Prescription Upload</h3>
+        <p class="subtext">Mandatory verification for restricted pharmaceuticals.</p>
+        
+        <div class="drop-zone">
+            <div class="cloud-icon">☁️</div>
+            <p><strong>Drop prescription here</strong></p>
+            <p class="file-types">Supports PDF, JPG, PNG (Max 10MB)</p>
+            <button class="browse-btn">BROWSE FILES</button>
+        </div>
+
+        <button class="add-btn">ADD PRESCRIPTION</button>
+    </div>
+
+    <!-- Summary -->
+    <div class="summary">
+        <div class="summary-line">
+            <span>Subtotal</span>
+            <span>৳43</span>
+        </div>
+        <div class="summary-line">
+            <span>Pickup Fee</span>
+            <span>৳100</span>
+        </div>
+        <div class="summary-total">
+            <span>Total</span>
+            <span class="total-price">100</span>
+        </div>
+    </div>
+
+    <!-- Checkout Button -->
+    <button class="checkout-btn">Reserve Now &rarr;</button>
+</div>
+
+</body>
+</html>

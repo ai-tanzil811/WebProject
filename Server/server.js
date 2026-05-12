@@ -28,6 +28,30 @@ app.use(session({
 
 app.use(express.static(path.join(__dirname, '../FrontEnd')));
 
+// Redirect legacy page paths to the new /pages/ structure
+app.use((req, res, next) => {
+  if (req.path.startsWith('/api/')) {
+    return next();
+  }
+
+  let redirectPath = null;
+
+  if (req.path.startsWith('/user/') || req.path.startsWith('/admin/')) {
+    redirectPath = req.path.replace(/^\/(user|admin)\//, '/pages/');
+    if (!path.extname(redirectPath)) {
+      redirectPath += '.html';
+    }
+  } else if (req.path.startsWith('/pages/') && !path.extname(req.path)) {
+    redirectPath = `${req.path}.html`;
+  }
+
+  if (redirectPath) {
+    return res.redirect(301, redirectPath);
+  }
+
+  next();
+});
+
 app.use('/api/auth', authRoutes);
 app.use('/api/medicines', medicinesRoutes);
 app.use('/api/cart', cartRoutes);
