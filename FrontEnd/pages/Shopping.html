@@ -1,37 +1,128 @@
+
 <!DOCTYPE html>
 <html lang="en">
-<head>
-  <meta charset="UTF-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>MediVault - Shop Medicines</title>
-  <link rel="stylesheet" href="../styles/shopping.css">
-</head>
-<body>
-  <div class="navbar">
-    <div class="navbar-container">
-      <div class="navbar-brand">🏥 MediVault</div>
-      <div class="navbar-menu">
-        <button class="btn-logout" id="logoutBtn">Logout</button>
-      </div>
-    </div>
-  </div>
 
-  <div class="container">
-    <div class="main-content">
-      <div class="sidebar">
-        <div class="search-box">
-          <input type="text" id="searchInput" placeholder="Search medicines...">
-          <button class="btn-search" id="searchBtn">Search</button>
+<head>
+  <meta charset="UTF-8" />
+  <meta
+    name="viewport"
+    content="width=device-width, initial-scale=1.0"
+  />
+
+  <title>MediVault - Shop Medicines</title>
+
+  <link
+    rel="stylesheet"
+    href="../styles/shopping.css"
+  />
+</head>
+
+<body>
+
+
+  <header class="navbar">
+
+    <div class="navbar-container">
+
+      <div class="navbar-left">
+
+        <div class="navbar-brand">
+          🏥 MediVault
         </div>
 
-        <div class="filters">
-          <h3>Filters</h3>
-          <div class="filter-group">
-            <label for="strengthFilter">Strength:</label>
-            <input type="text" id="strengthFilter" placeholder="e.g., 500mg">
+        <nav class="navbar-links">
+          <a href="#" class="active">Dashboard</a>
+          <a href="#">Help</a>
+        </nav>
+
+      </div>
+
+      <div class="navbar-right">
+
+        <button class="nav-icon">
+          🔔
+        </button>
+
+        <button class="nav-icon">
+          👤
+        </button>
+
+        <button
+          class="btn btn-danger btn-logout"
+          id="logoutBtn"
+        >
+          Logout
+        </button>
+
+      </div>
+
+    </div>
+
+  </header>
+
+  <!-- =========================
+       MAIN CONTENT
+  ========================== -->
+
+  <main class="container">
+
+    <div class="main-content">
+
+      <!-- =========================
+           SIDEBAR
+      ========================== -->
+
+      <aside class="sidebar">
+
+        <!-- Search -->
+
+        <section class="sidebar-section">
+
+          <div class="search-box">
+
+            <input
+              type="text"
+              id="searchInput"
+              placeholder="Search medicines..."
+            />
+
+            <button
+              class="btn btn-primary btn-search"
+              id="searchBtn"
+            >
+              Search
+            </button>
+
           </div>
+
+        </section>
+
+        <!-- Filters -->
+
+        <section class="sidebar-section filters">
+
+          <h3>Filters</h3>
+
           <div class="filter-group">
-            <label for="dosageFilter">Dosage Form:</label>
+
+            <label for="strengthFilter">
+              Strength
+            </label>
+
+            <input
+              type="text"
+              id="strengthFilter"
+              placeholder="e.g., 500mg"
+            />
+
+          </div>
+
+          <div class="filter-group">
+
+            <label for="dosageFilter">
+              Dosage Form
+            </label>
+
             <select id="dosageFilter">
               <option value="">All</option>
               <option value="Tablet">Tablet</option>
@@ -40,77 +131,298 @@
               <option value="Injection">Injection</option>
               <option value="Cream">Cream</option>
             </select>
+
           </div>
-          <button class="btn-filter" id="applyFilterBtn">Apply Filters</button>
-          <button class="btn-clear-filter" id="clearFilterBtn">Clear Filters</button>
-        </div>
 
-        <div class="cart-summary">
+          <button
+            class="btn btn-primary btn-filter"
+            id="applyFilterBtn"
+          >
+            Apply Filters
+          </button>
+
+          <button
+            class="btn btn-secondary btn-clear-filter"
+            id="clearFilterBtn"
+          >
+            Clear Filters
+          </button>
+
+        </section>
+
+        <!-- Availability -->
+
+        <section class="sidebar-section availability-box">
+
+          <h3>Availability</h3>
+
+          <div class="availability-status">
+
+            <span class="status-dot"></span>
+
+            <div>
+
+              <strong>IN STOCK READY</strong>
+
+              <p>
+                Medicines are available for immediate
+                reservation and pickup.
+              </p>
+
+            </div>
+
+          </div>
+
+        </section>
+
+        <!-- Cart Summary -->
+
+        <section class="sidebar-section cart-summary">
+
           <h3>Cart Summary</h3>
-          <div class="cart-items-count">Items: <span id="cartCount">0</span></div>
-          <div class="cart-total">Total: <span id="cartTotal">0.00</span> in taka</div>
-          <button class="btn-view-cart" id="viewCartBtn">View Cart</button>
-          <button class="btn-checkout" id="checkoutBtn">Checkout</button>
-        </div>
-      </div>
 
-      <div class="medicines-section">
-        <h1>Available Medicines</h1>
-        <div class="medicines-grid" id="medicinesGrid">
-          <!-- Medicines will be loaded here -->
+          <div class="cart-items-count">
+            Items:
+            <span id="cartCount">0</span>
+          </div>
+
+          <div class="cart-total">
+            Total:
+            ৳<span id="cartTotal">0.00</span>
+          </div>
+
+          <button
+            class="btn btn-outline btn-view-cart"
+            id="viewCartBtn"
+          >
+            View Cart
+          </button>
+
+          <button
+            class="btn btn-success btn-checkout"
+            id="checkoutBtn"
+          >
+            Checkout
+          </button>
+
+        </section>
+
+      </aside>
+
+      <!-- =========================
+           MEDICINES SECTION
+      ========================== -->
+
+      <section class="medicines-section">
+
+        <!-- Header -->
+
+        <div class="page-header">
+
+          <h1>
+            Medication Catalog
+          </h1>
+
+          <p class="section-description">
+            Browse available medicines and reserve
+            items from the clinical inventory.
+          </p>
+
         </div>
-        <div class="loading" id="loadingSpinner" style="display: none;">
+
+        <!-- Top Search -->
+
+        <div class="top-search-bar">
+
+          <input
+            type="text"
+            placeholder="Search by medicine, brand, or ingredient..."
+          />
+
+        </div>
+
+        <!-- Medicines Grid -->
+
+        <div
+          class="medicines-grid"
+          id="medicinesGrid"
+        >
+          <!-- Medicines loaded dynamically -->
+        </div>
+
+        <!-- Loading -->
+
+        <div
+          class="loading"
+          id="loadingSpinner"
+          style="display: none;"
+        >
           <p>Loading medicines...</p>
         </div>
-        <div class="pagination" id="paginationContainer"></div>
-      </div>
-    </div>
-  </div>
 
-  <!-- Cart Modal -->
-  <div class="modal" id="cartModal">
+        <!-- Pagination -->
+
+        <div
+          class="pagination"
+          id="paginationContainer"
+        ></div>
+
+      </section>
+
+    </div>
+
+  </main>
+
+  <!-- =========================
+       CART MODAL
+  ========================== -->
+
+  <div
+    class="modal"
+    id="cartModal"
+  >
+
     <div class="modal-content">
+
       <div class="modal-header">
+
         <h2>Shopping Cart</h2>
-        <button class="btn-close" id="closeCartBtn">&times;</button>
+
+        <button
+          class="btn-close"
+          id="closeCartBtn"
+        >
+          &times;
+        </button>
+
       </div>
+
       <div class="modal-body">
-        <div class="cart-items-list" id="cartItemsList">
-          <!-- Cart items will be loaded here -->
+
+        <div
+          class="cart-items-list"
+          id="cartItemsList"
+        >
+          <!-- Cart items -->
         </div>
+
       </div>
+
       <div class="modal-footer">
-        <div class="cart-total-large">Total: ₱<span id="cartTotalLarge">0.00</span></div>
-        <button class="btn-continue-shopping" id="continueShopping">Continue Shopping</button>
-        <button class="btn-checkout-cart" id="checkoutFromCart">Proceed to Checkout</button>
+
+        <div class="cart-total-large">
+          Total:
+          ৳<span id="cartTotalLarge">0.00</span>
+        </div>
+
+        <button
+          class="btn btn-secondary btn-continue-shopping"
+          id="continueShopping"
+        >
+          Continue Shopping
+        </button>
+
+        <button
+          class="btn btn-success btn-checkout-cart"
+          id="checkoutFromCart"
+        >
+          Proceed to Checkout
+        </button>
+
       </div>
+
     </div>
+
   </div>
 
-  <!-- Conflict Warning Modal -->
-  <div class="modal" id="conflictModal">
+  <!-- =========================
+       CONFLICT MODAL
+  ========================== -->
+
+  <div
+    class="modal"
+    id="conflictModal"
+  >
+
     <div class="modal-content modal-large">
+
       <div class="modal-header">
-        <h2>⚠️ Drug Interaction Warning</h2>
-        <button class="btn-close" id="closeConflictBtn">&times;</button>
+
+        <h2>
+          ⚠ Drug Interaction Warning
+        </h2>
+
+        <button
+          class="btn-close"
+          id="closeConflictBtn"
+        >
+          &times;
+        </button>
+
       </div>
+
       <div class="modal-body">
-        <p class="warning-intro">We've detected potential drug interactions in your cart:</p>
-        <div class="conflicts-list" id="conflictsList">
-          <!-- Conflicts will be listed here -->
+
+        <p class="warning-intro">
+          Potential drug interactions detected
+          in your cart:
+        </p>
+
+        <div
+          class="conflicts-list"
+          id="conflictsList"
+        >
+          <!-- Conflicts -->
         </div>
-        <p class="warning-note">To proceed with checkout, please remove one of the conflicting medicines.</p>
+
+        <p class="warning-note">
+          Remove one of the conflicting medicines
+          to continue checkout.
+        </p>
+
       </div>
+
       <div class="modal-footer">
-        <button class="btn-remove-items" id="editCartBtn">Edit Cart</button>
+
+        <button
+          class="btn btn-primary btn-remove-items"
+          id="editCartBtn"
+        >
+          Edit Cart
+        </button>
+
       </div>
+
     </div>
+
   </div>
 
-  <!-- Feedback Messages -->
-  <div class="feedback-message" id="feedbackMessage" data-feedback hidden></div>
-  <div class="success-message" id="successMessage" data-success hidden></div>
+  <!-- =========================
+       FEEDBACK MESSAGES
+  ========================== -->
 
-  <script src="/script/shopping.js"></script>
+  <div
+    class="feedback-message"
+    id="feedbackMessage"
+    hidden
+  ></div>
+
+  <div
+    class="success-message"
+    id="successMessage"
+    hidden
+  ></div>
+
+  <!-- =========================
+       SCRIPT
+  ========================== -->
+
+  <script
+    defer
+    src="/script/shopping.js"
+  ></script>
+
 </body>
+
 </html>
+```
