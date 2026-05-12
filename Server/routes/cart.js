@@ -13,8 +13,10 @@ function requireLogin(req, res, next) {
 router.post('/add', requireLogin, async (req, res) => {
   try {
     const { medicine_id, quantity } = req.body;
+    const parsedMedicineId = Number.parseInt(medicine_id, 10);
+    const parsedQuantity = Number.parseInt(quantity, 10);
 
-    if (!medicine_id || !quantity || quantity < 1) {
+    if (Number.isNaN(parsedMedicineId) || Number.isNaN(parsedQuantity) || parsedQuantity < 1) {
       return res.status(400).json({ success: false, message: 'Invalid medicine_id or quantity' });
     }
 
@@ -25,33 +27,43 @@ router.post('/add', requireLogin, async (req, res) => {
     const connection = await pool.getConnection();
     try {
       const [medicines] = await connection.query(
-        'SELECT medicine_id, price, quantity as stock FROM Medicines WHERE medicine_id = ?',
-        [medicine_id]
+        'SELECT medicine_id, generic_name, brand_name, price, quantity as stock FROM Medicines WHERE medicine_id = ?',
+        [parsedMedicineId]
       );
 
       if (medicines.length === 0) {
         return res.status(404).json({ success: false, message: 'Medicine not found' });
       }
 
-      if (medicines[0].stock < quantity) {
-        return res.status(400).json({ success: false, message: 'Not enough stock available' });
+      const existing = req.session.cart.find(item => item.medicine_id === parsedMedicineId);
+      const requestedQuantity = existing ? existing.quantity + parsedQuantity : parsedQuantity;
+
+      if (medicines[0].stock < requestedQuantity) {
+        return res.status(400).json({
+          success: false,
+          message: `Not enough stock available. Current stock: ${medicines[0].stock}`
+        });
       }
 
-      const existing = req.session.cart.find(item => item.medicine_id === parseInt(medicine_id));
-
       if (existing) {
-        existing.quantity += parseInt(quantity);
+        existing.quantity = requestedQuantity;
+        existing.price = Number.parseFloat(medicines[0].price);
       } else {
         req.session.cart.push({
-          medicine_id: parseInt(medicine_id),
-          quantity: parseInt(quantity),
-          price: medicines[0].price
+          medicine_id: parsedMedicineId,
+          quantity: parsedQuantity,
+          price: Number.parseFloat(medicines[0].price)
         });
       }
 
       res.json({
         success: true,
-        message: 'Item added to cart',
+        message: `${medicines[0].generic_name} added to cart`,
+        medicine: {
+          medicine_id: medicines[0].medicine_id,
+          generic_name: medicines[0].generic_name,
+          brand_name: medicines[0].brand_name
+        },
         cartCount: req.session.cart.reduce((sum, item) => sum + item.quantity, 0)
       });
     } finally {
@@ -88,6 +100,71 @@ router.post('/remove', requireLogin, (req, res) => {
   }
 });
 
+router.post('/update', requireLogin, async (req, res) => {
+  try {
+    const { medicine_id, quantity } = req.body;
+    const parsedMedicineId = Number.parseInt(medicine_id, 10);
+    const parsedQuantity = Number.parseInt(quantity, 10);
+
+    if (Number.isNaN(parsedMedicineId) || Number.isNaN(parsedQuantity)) {
+      return res.status(400).json({ success: false, message: 'Valid medicine_id and quantity are required' });
+    }
+
+    if (!req.session.cart) {
+      req.session.cart = [];
+    }
+
+    const itemIndex = req.session.cart.findIndex((item) => item.medicine_id === parsedMedicineId);
+
+    if (itemIndex === -1) {
+      return res.status(404).json({ success: false, message: 'Medicine not found in cart' });
+    }
+
+    if (parsedQuantity <= 0) {
+      req.session.cart.splice(itemIndex, 1);
+      return res.json({
+        success: true,
+        message: 'Item removed from cart',
+        cartCount: req.session.cart.reduce((sum, item) => sum + item.quantity, 0)
+      });
+    }
+
+    const connection = await pool.getConnection();
+    try {
+      const [medicines] = await connection.query(
+        'SELECT medicine_id, generic_name, price, quantity AS stock FROM Medicines WHERE medicine_id = ?',
+        [parsedMedicineId]
+      );
+
+      if (medicines.length === 0) {
+        return res.status(404).json({ success: false, message: 'Medicine not found' });
+      }
+
+      if (parsedQuantity > medicines[0].stock) {
+        return res.status(400).json({
+          success: false,
+          message: `Only ${medicines[0].stock} units available in stock`
+        });
+      }
+
+      req.session.cart[itemIndex].quantity = parsedQuantity;
+      req.session.cart[itemIndex].price = Number.parseFloat(medicines[0].price);
+
+      res.json({
+        success: true,
+        message: `${medicines[0].generic_name} quantity updated`,
+        cartCount: req.session.cart.reduce((sum, item) => sum + item.quantity, 0),
+        itemQuantity: parsedQuantity
+      });
+    } finally {
+      connection.release();
+    }
+  } catch (error) {
+    console.error('Error updating cart quantity:', error);
+    res.status(500).json({ success: false, message: 'Failed to update cart quantity' });
+  }
+});
+
 router.get('/view', requireLogin, async (req, res) => {
   try {
     if (!req.session.cart || req.session.cart.length === 0) {
@@ -100,7 +177,25 @@ router.get('/view', requireLogin, async (req, res) => {
       const placeholders = medicineIds.map(() => '?').join(',');
 
       const [medicines] = await connection.query(
-        `SELECT medicine_id, generic_name, brand_name, strength, dosage_form, price, is_restricted FROM Medicines WHERE medicine_id IN (${placeholders})`,
+        `SELECT
+          m.medicine_id,
+          m.generic_name,
+          m.brand_name,
+          m.strength,
+          m.dosage_form,
+          m.manufacturer,
+          m.price,
+          m.quantity,
+          m.expiry_date,
+          m.is_restricted,
+          m.description,
+          (
+            SELECT COUNT(*)
+            FROM DrugConflicts dc
+            WHERE dc.medicine_id_1 = m.medicine_id OR dc.medicine_id_2 = m.medicine_id
+          ) AS conflict_count
+         FROM Medicines m
+         WHERE m.medicine_id IN (${placeholders})`,
         medicineIds
       );
 
@@ -109,7 +204,7 @@ router.get('/view', requireLogin, async (req, res) => {
       const cart = req.session.cart.map(item => ({
         ...medicineMap[item.medicine_id],
         quantity: item.quantity,
-        subtotal: item.price * item.quantity
+        subtotal: Number.parseFloat(medicineMap[item.medicine_id]?.price || 0) * item.quantity
       }));
 
       const total = cart.reduce((sum, item) => sum + item.subtotal, 0);
@@ -154,6 +249,7 @@ router.post('/check-conflicts', requireLogin, async (req, res) => {
         userMedicines = new Set(orderItems.map(item => item.medicine_id));
       }
 
+      const cartSet = new Set(cartMedicineIds);
       const allMedicineIds = new Set([...cartMedicineIds, ...userMedicines]);
       const medicineIdArray = Array.from(allMedicineIds);
 
@@ -161,36 +257,26 @@ router.post('/check-conflicts', requireLogin, async (req, res) => {
         return res.json({ success: true, conflicts: [] });
       }
 
-      for (let i = 0; i < cartMedicineIds.length; i++) {
-        for (let j = i + 1; j < cartMedicineIds.length; j++) {
-          const med1 = cartMedicineIds[i];
-          const med2 = cartMedicineIds[j];
+      const placeholders = medicineIdArray.map(() => '?').join(',');
+      const [foundConflicts] = await connection.query(
+        `SELECT
+          dc.*,
+          m1.generic_name AS medicine_1_name,
+          m2.generic_name AS medicine_2_name
+         FROM DrugConflicts dc
+         JOIN Medicines m1 ON dc.medicine_id_1 = m1.medicine_id
+         JOIN Medicines m2 ON dc.medicine_id_2 = m2.medicine_id
+         WHERE dc.medicine_id_1 IN (${placeholders})
+           AND dc.medicine_id_2 IN (${placeholders})`,
+        [...medicineIdArray, ...medicineIdArray]
+      );
 
-          const [found] = await connection.query(
-            'SELECT * FROM DrugConflicts WHERE (medicine_id_1 = ? AND medicine_id_2 = ?) OR (medicine_id_1 = ? AND medicine_id_2 = ?)',
-            [med1, med2, med2, med1]
-          );
-
-          if (found.length > 0) {
-            conflicts.push(found[0]);
-          }
+      foundConflicts.forEach((conflict) => {
+        const involvesCart = cartSet.has(conflict.medicine_id_1) || cartSet.has(conflict.medicine_id_2);
+        if (involvesCart) {
+          conflicts.push(conflict);
         }
-      }
-
-      for (const cartMed of cartMedicineIds) {
-        for (const userMed of userMedicines) {
-          if (cartMed === userMed) continue;
-
-          const [found] = await connection.query(
-            'SELECT * FROM DrugConflicts WHERE (medicine_id_1 = ? AND medicine_id_2 = ?) OR (medicine_id_1 = ? AND medicine_id_2 = ?)',
-            [cartMed, userMed, userMed, cartMed]
-          );
-
-          if (found.length > 0) {
-            conflicts.push(found[0]);
-          }
-        }
-      }
+      });
 
       res.json({ success: true, conflicts });
     } finally {

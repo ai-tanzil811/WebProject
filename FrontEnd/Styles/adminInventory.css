@@ -1,25 +1,4 @@
-*, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
-
-:root {
-  --bg: #f0f2f5;
-  --white: #ffffff;
-  --border: #e2e6ea;
-  --text-primary: #1a1d23;
-  --text-secondary: #6b7280;
-  --text-muted: #9ca3af;
-  --blue: #2563eb;
-  --blue-light: #eff6ff;
-  --red: #dc2626;
-  --red-light: #fef2f2;
-  --green: #15803d;
-  --green-light: #ecfdf3;
-  --amber: #d97706;
-  --amber-light: #fffbeb;
-  --panel-glow: 0 18px 40px rgba(15, 23, 42, 0.06);
-  --shadow-sm: 0 1px 3px rgba(0,0,0,0.08);
-  --radius: 10px;
-  --radius-sm: 6px;
-}
+@import "./adminTheme.css";
 
 body.admin-page {
   font-family: "DM Sans", sans-serif;
@@ -49,11 +28,6 @@ body.admin-page {
 
 .breadcrumb span { color: #60a5fa; }
 
-.nav {
-  background: var(--white);
-  border-bottom: 1px solid var(--border);
-  padding: 0 20px;
-}
 .top-cards {
   display: grid;
   grid-template-columns: 1fr 1fr 160px;

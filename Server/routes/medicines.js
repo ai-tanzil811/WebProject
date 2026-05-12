@@ -42,10 +42,12 @@ router.get('/', async (req, res) => {
         m.strength,
         m.dosage_form,
         m.manufacturer,
+        m.batch_number,
         m.price,
         m.quantity,
         m.is_restricted,
         m.expiry_date,
+        m.description,
         (
           SELECT COUNT(*)
           FROM DrugConflicts dc

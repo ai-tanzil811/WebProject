@@ -1,11 +1,5 @@
-:root {
-    --bg-color: #f9f9f9;
-    --white: #ffffff;
-    --danger-red: #8b0000;
-    --warning-light: #fff5f5;
-    --navy: #004080;
-    --gray-text: #666;
-}
+@import "./baseReset.css";
+@import "./coreTokens.css";
 
 body {
     font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;

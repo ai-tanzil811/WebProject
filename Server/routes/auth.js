@@ -722,4 +722,53 @@ router.post('/reset-password', async (req, res) => {
   }
 });
 
+// GET /profile - return detailed profile for authenticated user
+router.get('/profile', async (req, res) => {
+  try {
+    if (!req.session || !req.session.user) {
+      return res.status(401).json({ success: false, message: 'Not authenticated' });
+    }
+
+    const role = req.session.user.role === 'admin' ? 'Admins' : 'Users';
+    const userId = req.session.user.id;
+    const connection = await pool.getConnection();
+
+    try {
+      let query;
+      if (role === 'Admins') {
+        query = 'SELECT admin_id AS id, name, email, shop_banner_image_path AS photo_image_path, shop_banner_image_type AS photo_image_type, created_at FROM Admins WHERE admin_id = ?';
+      } else {
+        query = 'SELECT user_id AS id, name, email, nid, age, photo_image_path, photo_image_type, created_at FROM Users WHERE user_id = ?';
+      }
+
+      const [rows] = await connection.query(query, [userId]);
+
+      if (rows.length === 0) {
+        return res.status(404).json({ success: false, message: 'User not found' });
+      }
+
+      const user = rows[0];
+      // Normalize response shape
+      const profile = {
+        id: user.id,
+        name: user.name,
+        email: user.email,
+        role: req.session.user.role,
+        nid: user.nid || null,
+        age: user.age || null,
+        photo_image_path: user.photo_image_path || null,
+        photo_image_type: user.photo_image_type || null,
+        created_at: user.created_at || null
+      };
+
+      res.json({ success: true, user: profile });
+    } finally {
+      connection.release();
+    }
+  } catch (error) {
+    console.error('Profile fetch error:', error);
+    res.status(500).json({ success: false, message: 'Server error while fetching profile' });
+  }
+});
+
 module.exports = router;

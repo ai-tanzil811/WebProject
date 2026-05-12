@@ -1,0 +1,57 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>MediVault | Profile</title>
+  <link rel="stylesheet" href="../Styles/userNavPages.css" />
+</head>
+<body>
+  <header class="nav">
+    <div class="nav-left">
+      <a class="logo" href="/pages/Shopping.html">MediVault</a>
+      <nav class="nav-links">
+        <a class="nav-link" href="/pages/Shopping.html">Dashboard</a>
+        <a class="nav-link" href="/pages/User_notifications.html">Notifications</a>
+        <a class="nav-link active" href="/pages/User_profile.html">Profile</a>
+      </nav>
+    </div>
+    <a class="btn-back" href="/pages/Shopping.html">Back to Shopping</a>
+  </header>
+
+  <main class="container">
+    <section class="card">
+      <h1>Profile</h1>
+      <p class="subtitle">Manage your account navigation and continue to your shopping dashboard.</p>
+
+      <div class="profile-grid">
+        <div class="profile-row">
+          <span class="label">Account Type</span>
+          <span class="value" id="profile-role">User</span>
+        </div>
+        <div class="profile-row">
+          <span class="label">Name</span>
+          <span class="value" id="profile-name">—</span>
+        </div>
+        <div class="profile-row">
+          <span class="label">Email</span>
+          <span class="value" id="profile-email">—</span>
+        </div>
+        <div class="profile-row">
+          <span class="label">National ID</span>
+          <span class="value" id="profile-nid">—</span>
+        </div>
+        <div class="profile-row">
+          <span class="label">Age</span>
+          <span class="value" id="profile-age">—</span>
+        </div>
+        <div class="profile-row">
+          <span class="label">Profile Photo</span>
+          <span class="value"><img id="profile-photo" src="/assets/default-user.png" alt="profile" style="height:48px;border-radius:6px;"/></span>
+        </div>
+      </div>
+    </section>
+  </main>
+  <script src="../script/profile.js"></script>
+</body>
+</html>

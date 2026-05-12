@@ -26,24 +26,37 @@
 
       <div class="navbar-left">
 
-        <div class="navbar-brand">
-          🏥 MediVault
-        </div>
+        <a
+          class="navbar-brand"
+          href="/pages/Shopping.html"
+        >
+          MediVault
+        </a>
 
         <nav class="navbar-links">
-          <a href="#" class="active">Dashboard</a>
-          <a href="#">Help</a>
+          <a href="/pages/Shopping.html" class="nav-link active">Dashboard</a>
+          <a href="/pages/Checkout.html" class="nav-link">Checkout</a>
         </nav>
 
       </div>
 
       <div class="navbar-right">
 
-        <button class="nav-icon">
+        <button
+          class="nav-icon"
+          id="notificationBtn"
+          type="button"
+          aria-label="Open notifications"
+        >
           🔔
         </button>
 
-        <button class="nav-icon">
+        <button
+          class="nav-icon"
+          id="profileBtn"
+          type="button"
+          aria-label="Open profile"
+        >
           👤
         </button>
 
@@ -236,6 +249,7 @@
 
           <input
             type="text"
+            id="topSearchInput"
             placeholder="Search by medicine, brand, or ingredient..."
           />
 
@@ -425,4 +439,3 @@
 </body>
 
 </html>
-```

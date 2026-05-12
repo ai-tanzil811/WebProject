@@ -1,43 +1,6 @@
-*, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+@import "./adminTheme.css";
 
-:root {
-  --bg: #f0f2f5;
-  --white: #ffffff;
-  --border: #e2e6ea;
-  --text-primary: #1a1d23;
-  --text-secondary: #6b7280;
-  --text-muted: #9ca3af;
-  --blue: #2563eb;
-  --blue-light: #eff6ff;
-  --red: #dc2626;
-  --red-light: #fef2f2;
-  --green: #16a34a;
-  --green-light: #f0fdf4;
-  --yellow: #d97706;
-  --shadow-sm: 0 1px 3px rgba(0,0,0,0.07);
-  --shadow: 0 2px 8px rgba(0,0,0,0.08);
-  border: 1px solid var(--border);
-  background: var(--white);
-  color: var(--text-secondary);
-  font-size: 11px;
-}
-
-.nav-icon:hover { background: var(--bg); }
-
-.avatar {
-  width: 28px;
-  height: 28px;
-  border-radius: 50%;
-  background: #374151;
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  color: white;
-  font-size: 11px;
-  font-weight: 600;
-}
-
-.page { padding: 20px; max-width: 860px; margin: 0 auto; }
+.page { max-width: 860px; }
 
 .page-header {
   display: flex;
