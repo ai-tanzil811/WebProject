@@ -1,14 +1,13 @@
-@import "./adminTheme.css";
+@import "./coreTokens.css";
 
 .nav {
   background: var(--white);
   border-bottom: 1px solid var(--border);
-  padding: 0 20px;
-  height: 48px;
+  padding: .7rem 1.25rem;
   display: flex;
   align-items: center;
   justify-content: space-between;
-  gap: 24px;
+  gap: 1rem;
   position: sticky;
   top: 0;
   z-index: 100;
@@ -17,23 +16,22 @@
 .nav-left { display: flex; align-items: center; gap: 16px; }
 
 .logo {
-  font-size: 15px;
+  font-size: 1.05rem;
   font-weight: 700;
   color: var(--text-primary);
-  letter-spacing: -0.3px;
   text-decoration: none;
 }
 
 .nav-links { display: flex; gap: 4px; }
 
 .nav-link {
-  padding: 5px 12px;
+  padding: .35rem .7rem;
   border-radius: var(--radius-sm);
-  font-size: 13px;
-  font-weight: 500;
+  font-size: .84rem;
+  font-weight: 600;
   color: var(--text-secondary);
   cursor: pointer;
-  transition: all 0.15s;
+  transition: var(--transition);
   text-decoration: none;
 }
 
@@ -47,17 +45,17 @@
   padding-bottom: 3px;
 }
 
-.nav-right { display: flex; align-items: center; gap: 10px; }
+.nav-right { display: flex; align-items: center; gap: .6rem; }
 
 .search-bar {
   display: flex;
   align-items: center;
-  background: var(--bg);
+  background: var(--gray-50);
   border: 1px solid var(--border);
   border-radius: var(--radius-sm);
-  padding: 5px 10px;
+  padding: 6px 10px;
   gap: 6px;
-  width: 200px;
+  width: 220px;
 }
 
 .search-bar input {

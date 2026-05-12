@@ -18,8 +18,9 @@ document.addEventListener('DOMContentLoaded', async () => {
   try {
     const resp = await fetch('/api/auth/profile', { credentials: 'include' });
     if (resp.status === 401) {
-      // Not authenticated, redirect to login
-      window.location.href = '/pages/User_login.html';
+      // Not authenticated, redirect to appropriate login (admin vs user)
+      const isAdminPage = document.body && document.body.classList && document.body.classList.contains('admin-page');
+      window.location.href = isAdminPage ? '/pages/Admin_login.html' : '/pages/User_login.html';
       return;
     }
 
@@ -32,13 +33,13 @@ document.addEventListener('DOMContentLoaded', async () => {
 
     const user = data.user;
 
-    roleEl.textContent = user.role || 'User';
-    nameEl.textContent = user.name || '—';
-    emailEl.textContent = user.email || '—';
-    nidEl.textContent = user.nid || '—';
-    ageEl.textContent = user.age || '—';
+    if (roleEl) roleEl.textContent = user.role || 'User';
+    if (nameEl) nameEl.textContent = user.name || '—';
+    if (emailEl) emailEl.textContent = user.email || '—';
+    if (nidEl) nidEl.textContent = user.nid || '—';
+    if (ageEl) ageEl.textContent = user.age || '—';
 
-    if (user.photo_image_path) {
+    if (user.photo_image_path && photoEl) {
       // If server stores a relative path, use it directly.
       photoEl.src = user.photo_image_path;
     }

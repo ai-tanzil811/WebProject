@@ -266,7 +266,7 @@ function generateOTPEmailTemplate(userName, otp) {
           <div class="security-notice">
             <strong>🛡️ Security Notice:</strong> If you didn't request this password reset,
             please ignore this email and ensure your account is secure. Never share this code
-            with anyone.
+            with anyone.--Ashraful ISLAM TANZIL, 2026-06-15
           </div>
         </div>
 
