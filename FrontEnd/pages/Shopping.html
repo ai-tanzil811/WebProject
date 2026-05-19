@@ -1,141 +1,58 @@
-
 <!DOCTYPE html>
 <html lang="en">
-
 <head>
-  <meta charset="UTF-8" />
-  <meta
-    name="viewport"
-    content="width=device-width, initial-scale=1.0"
-  />
-
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>MediVault - Shop Medicines</title>
-
-  <link
-    rel="stylesheet"
-    href="../styles/shopping.css"
-  />
+  <link rel="stylesheet" href="../styles/shopping.css">
 </head>
-
 <body>
-
-
-  <header class="navbar">
-
+  <div class="navbar">
     <div class="navbar-container">
-
-      <div class="navbar-left">
-
-        <a
-          class="navbar-brand"
-          href="/pages/Shopping.html"
-        >
-          MediVault
-        </a>
-
-        <nav class="navbar-links">
-          <a href="/pages/Shopping.html" class="nav-link active">Dashboard</a>
-          <a href="/pages/Checkout.html" class="nav-link">Checkout</a>
-        </nav>
-
+      <div class="navbar-brand">🏥 MediVault</div>
+      <div class="navbar-menu">
+        <button class="btn-logout" id="logoutBtn">Logout</button>
       </div>
-
-      <div class="navbar-right">
-
-        <button
-          class="nav-icon"
-          id="notificationBtn"
-          type="button"
-          aria-label="Open notifications"
-        >
-          🔔
-        </button>
-
-        <button
-          class="nav-icon"
-          id="profileBtn"
-          type="button"
-          aria-label="Open profile"
-        >
-          👤
-        </button>
-
-        <button
-          class="btn btn-danger btn-logout"
-          id="logoutBtn"
-        >
-          Logout
-        </button>
-
-      </div>
-
     </div>
+  </div>
 
-  </header>
-
-  <!-- =========================
-       MAIN CONTENT
-  ========================== -->
-
-  <main class="container">
-
+  <div class="container">
     <div class="main-content">
-
-      <!-- =========================
-           SIDEBAR
-      ========================== -->
-
-      <aside class="sidebar">
-
-        <!-- Search -->
-
-        <section class="sidebar-section">
-
-          <div class="search-box">
-
-            <input
-              type="text"
-              id="searchInput"
-              placeholder="Search medicines..."
-            />
-
-            <button
-              class="btn btn-primary btn-search"
-              id="searchBtn"
-            >
-              Search
-            </button>
-
+      <div class="medicines-section">
+        <div class="section-header">
+          <h1>Available Medicines</h1>
+          <div class="sort-controls">
+            <label for="sortSelect">Sort by:</label>
+            <select id="sortSelect">
+              <option value="name">Name (A-Z)</option>
+              <option value="price-low">Price: Low to High</option>
+              <option value="price-high">Price: High to Low</option>
+            </select>
           </div>
+        </div>
+        <div class="medicines-grid" id="medicinesGrid">
+          <!-- Medicines will be loaded here -->
+        </div>
+        <div class="loading" id="loadingSpinner" style="display: none;">
+          <p>Loading medicines...</p>
+        </div>
+        <div class="pagination" id="paginationContainer"></div>
+      </div>
 
-        </section>
+      <div class="sidebar">
+        <div class="search-box">
+          <input type="text" id="searchInput" placeholder="Search medicines...">
+          <button class="btn-search" id="searchBtn">Search</button>
+        </div>
 
-        <!-- Filters -->
-
-        <section class="sidebar-section filters">
-
+        <div class="filters">
           <h3>Filters</h3>
-
           <div class="filter-group">
-
-            <label for="strengthFilter">
-              Strength
-            </label>
-
-            <input
-              type="text"
-              id="strengthFilter"
-              placeholder="e.g., 500mg"
-            />
-
+            <label for="strengthFilter">Strength:</label>
+            <input type="text" id="strengthFilter" placeholder="e.g., 500mg">
           </div>
-
           <div class="filter-group">
-
-            <label for="dosageFilter">
-              Dosage Form
-            </label>
-
+            <label for="dosageFilter">Dosage Form:</label>
             <select id="dosageFilter">
               <option value="">All</option>
               <option value="Tablet">Tablet</option>
@@ -144,298 +61,66 @@
               <option value="Injection">Injection</option>
               <option value="Cream">Cream</option>
             </select>
-
           </div>
+          <button class="btn-filter" id="applyFilterBtn">Apply Filters</button>
+          <button class="btn-clear-filter" id="clearFilterBtn">Clear Filters</button>
+        </div>
 
-          <button
-            class="btn btn-primary btn-filter"
-            id="applyFilterBtn"
-          >
-            Apply Filters
-          </button>
-
-          <button
-            class="btn btn-secondary btn-clear-filter"
-            id="clearFilterBtn"
-          >
-            Clear Filters
-          </button>
-
-        </section>
-
-        <!-- Availability -->
-
-        <section class="sidebar-section availability-box">
-
-          <h3>Availability</h3>
-
-          <div class="availability-status">
-
-            <span class="status-dot"></span>
-
-            <div>
-
-              <strong>IN STOCK READY</strong>
-
-              <p>
-                Medicines are available for immediate
-                reservation and pickup.
-              </p>
-
-            </div>
-
-          </div>
-
-        </section>
-
-        <!-- Cart Summary -->
-
-        <section class="sidebar-section cart-summary">
-
+        <div class="cart-summary">
           <h3>Cart Summary</h3>
-
-          <div class="cart-items-count">
-            Items:
-            <span id="cartCount">0</span>
-          </div>
-
-          <div class="cart-total">
-            Total:
-            ৳<span id="cartTotal">0.00</span>
-          </div>
-
-          <button
-            class="btn btn-outline btn-view-cart"
-            id="viewCartBtn"
-          >
-            View Cart
-          </button>
-
-          <button
-            class="btn btn-success btn-checkout"
-            id="checkoutBtn"
-          >
-            Checkout
-          </button>
-
-        </section>
-
-      </aside>
-
-      <!-- =========================
-           MEDICINES SECTION
-      ========================== -->
-
-      <section class="medicines-section">
-
-        <!-- Header -->
-
-        <div class="page-header">
-
-          <h1>
-            Medication Catalog
-          </h1>
-
-          <p class="section-description">
-            Browse available medicines and reserve
-            items from the clinical inventory.
-          </p>
-
+          <div class="cart-items-count">Items: <span id="cartCount">0</span></div>
+          <div class="cart-total">Total: <span id="cartTotal">0.00</span> in taka</div>
+          <button class="btn-view-cart" id="viewCartBtn">View Cart</button>
+          <button class="btn-checkout" id="checkoutBtn">Checkout</button>
         </div>
-
-        <!-- Top Search -->
-
-        <div class="top-search-bar">
-
-          <input
-            type="text"
-            id="topSearchInput"
-            placeholder="Search by medicine, brand, or ingredient..."
-          />
-
-        </div>
-
-        <!-- Medicines Grid -->
-
-        <div
-          class="medicines-grid"
-          id="medicinesGrid"
-        >
-          <!-- Medicines loaded dynamically -->
-        </div>
-
-        <!-- Loading -->
-
-        <div
-          class="loading"
-          id="loadingSpinner"
-          style="display: none;"
-        >
-          <p>Loading medicines...</p>
-        </div>
-
-        <!-- Pagination -->
-
-        <div
-          class="pagination"
-          id="paginationContainer"
-        ></div>
-
-      </section>
-
+      </div>
     </div>
+  </div>
 
-  </main>
-
-  <!-- =========================
-       CART MODAL
-  ========================== -->
-
-  <div
-    class="modal"
-    id="cartModal"
-  >
-
+  <!-- Cart Modal -->
+  <div class="modal" id="cartModal">
     <div class="modal-content">
-
       <div class="modal-header">
-
         <h2>Shopping Cart</h2>
-
-        <button
-          class="btn-close"
-          id="closeCartBtn"
-        >
-          &times;
-        </button>
-
+        <button class="btn-close" id="closeCartBtn">&times;</button>
       </div>
-
       <div class="modal-body">
-
-        <div
-          class="cart-items-list"
-          id="cartItemsList"
-        >
-          <!-- Cart items -->
+        <div class="cart-items-list" id="cartItemsList">
+          <!-- Cart items will be loaded here -->
         </div>
-
       </div>
-
       <div class="modal-footer">
-
-        <div class="cart-total-large">
-          Total:
-          ৳<span id="cartTotalLarge">0.00</span>
-        </div>
-
-        <button
-          class="btn btn-secondary btn-continue-shopping"
-          id="continueShopping"
-        >
-          Continue Shopping
-        </button>
-
-        <button
-          class="btn btn-success btn-checkout-cart"
-          id="checkoutFromCart"
-        >
-          Proceed to Checkout
-        </button>
-
+        <div class="cart-total-large">Total: ₱<span id="cartTotalLarge">0.00</span></div>
+        <button class="btn-continue-shopping" id="continueShopping">Continue Shopping</button>
+        <button class="btn-checkout-cart" id="checkoutFromCart">Proceed to Checkout</button>
       </div>
-
     </div>
-
   </div>
 
-  <!-- =========================
-       CONFLICT MODAL
-  ========================== -->
-
-  <div
-    class="modal"
-    id="conflictModal"
-  >
-
+  <!-- Conflict Warning Modal -->
+  <div class="modal" id="conflictModal">
     <div class="modal-content modal-large">
-
       <div class="modal-header">
-
-        <h2>
-          ⚠ Drug Interaction Warning
-        </h2>
-
-        <button
-          class="btn-close"
-          id="closeConflictBtn"
-        >
-          &times;
-        </button>
-
+        <h2>⚠️ Drug Interaction Warning</h2>
+        <button class="btn-close" id="closeConflictBtn">&times;</button>
       </div>
-
       <div class="modal-body">
-
-        <p class="warning-intro">
-          Potential drug interactions detected
-          in your cart:
-        </p>
-
-        <div
-          class="conflicts-list"
-          id="conflictsList"
-        >
-          <!-- Conflicts -->
+        <p class="warning-intro">We've detected potential drug interactions in your cart:</p>
+        <div class="conflicts-list" id="conflictsList">
+          <!-- Conflicts will be listed here -->
         </div>
-
-        <p class="warning-note">
-          Remove one of the conflicting medicines
-          to continue checkout.
-        </p>
-
+        <p class="warning-note">To proceed with checkout, please remove one of the conflicting medicines.</p>
       </div>
-
       <div class="modal-footer">
-
-        <button
-          class="btn btn-primary btn-remove-items"
-          id="editCartBtn"
-        >
-          Edit Cart
-        </button>
-
+        <button class="btn-remove-items" id="editCartBtn">Edit Cart</button>
       </div>
-
     </div>
-
   </div>
 
-  <!-- =========================
-       FEEDBACK MESSAGES
-  ========================== -->
+  <!-- Feedback Messages -->
+  <div class="feedback-message" id="feedbackMessage" data-feedback hidden></div>
+  <div class="success-message" id="successMessage" data-success hidden></div>
 
-  <div
-    class="feedback-message"
-    id="feedbackMessage"
-    hidden
-  ></div>
-
-  <div
-    class="success-message"
-    id="successMessage"
-    hidden
-  ></div>
-
-  <!-- =========================
-       SCRIPT
-  ========================== -->
-
-  <script
-    defer
-    src="/script/shopping.js"
-  ></script>
-
+  <script src="/script/shopping.js"></script>
 </body>
-
 </html>
