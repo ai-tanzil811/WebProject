@@ -1,0 +1,27 @@
+<nav class="nav">
+  <div class="nav-left">
+    <a class="logo" href="./Admin_dashboard.html">MediVault</a>
+    <div class="nav-links">
+      <a class="nav-link" data-nav="dashboard" href="./Admin_dashboard.html">Dashboard</a>
+      <a class="nav-link" data-nav="inventory" href="./Admin_inventory.html">Inventory</a>
+      <a class="nav-link" data-nav="conflicts" href="./Admin_conflicts.html">Conflict DB</a>
+    </div>
+  </div>
+  <div class="nav-right">
+    <label class="search-bar">
+      <span class="search-icon">S</span>
+      <input type="search" placeholder="Search records..." aria-label="Search records" data-nav-search />
+    </label>
+    <div class="dropdown" id="admin-dropdown">
+      <button class="dropdown-toggle" id="admin-dropdown-toggle" aria-haspopup="true" aria-expanded="false">
+        <span class="avatar" id="admin-avatar">A</span>
+        <span class="caret">▾</span>
+      </button>
+      <div class="dropdown-menu" id="admin-dropdown-menu" role="menu" aria-hidden="true">
+        <button class="dropdown-item" data-action="profile">Profile</button>
+        <div class="dropdown-divider"></div>
+        <button class="dropdown-item" data-action="logout">Logout</button>
+      </div>
+    </div>
+  </div>
+</nav>

@@ -1,0 +1,157 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>MediVault | Admin Inventory</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link href="https://fonts.googleapis.com/css2?family=DM+Sans:wght@400;500;600;700&display=swap" rel="stylesheet" />
+  <link rel="stylesheet" href="../Styles/adminNavbar.css" />
+  <link rel="stylesheet" href="../Styles/adminInventory.css" />
+</head>
+<body class="admin-page" data-active-nav="inventory">
+  <div class="breadcrumb">Admin / <span>Inventory</span></div>
+  <header class="app-header">
+    <div data-include="admin-navbar"></div>
+  </header>
+
+  <main class="page">
+    <section class="top-cards">
+      <div class="alert-card red">
+        <div class="metric-icon metric-icon-red">!</div>
+        <div class="alert-badge red">Critical Alert</div>
+        <div class="alert-value red" id="lowStockCount">12</div>
+        <div class="alert-label">Low Stock Alerts</div>
+      </div>
+      <div class="alert-card blue">
+        <div class="metric-icon metric-icon-blue">⏳</div>
+        <div class="alert-badge blue">Attention Required</div>
+        <div class="alert-value blue" id="expiringCount">08</div>
+        <div class="alert-label">Expiring Soon</div>
+      </div>
+      <div class="medicine-card">
+        <div class="pill-icon">M</div>
+        <div class="medicine-info">
+          <div class="medicine-value" id="totalMedicineCount">94</div>
+          <div class="medicine-label">Total Medicine</div>
+        </div>
+      </div>
+    </section>
+
+    <section class="main-grid">
+      <div class="panel">
+        <div class="stock-header">
+          <span class="stock-title">Active Stock</span>
+          <div class="stock-actions">
+            <button class="icon-btn" type="button" title="Export">Export</button>
+          </div>
+        </div>
+        <div class="stock-summary" id="inventoryStatus">Loading inventory data...</div>
+        <div class="stock-controls">
+          <input class="control-input" id="inventorySearch" type="search" placeholder="Search medicine" />
+          <input class="control-input" id="inventoryStrength" type="text" placeholder="Strength" />
+          <select class="control-select" id="inventoryDosage">
+            <option value="">All Forms</option>
+          </select>
+          <div class="filter-tabs" id="inventoryFilters">
+            <button class="filter-tab active" data-filter="all" type="button">All</button>
+            <button class="filter-tab" data-filter="in" type="button">In Stock</button>
+            <button class="filter-tab" data-filter="low" type="button">Low Stock</button>
+            <button class="filter-tab" data-filter="rx" type="button">Rx Required</button>
+          </div>
+        </div>
+        <table>
+          <thead>
+            <tr>
+              <th>Medicine Name</th>
+              <th>Stock</th>
+              <th>Expiry</th>
+              <th>Status</th>
+              <th>Actions</th>
+            </tr>
+          </thead>
+          <tbody data-role="inventory-body">
+            <tr>
+              <td colspan="5" class="empty-row">Loading inventory...</td>
+            </tr>
+          </tbody>
+        </table>
+        <div class="inventory-pagination" id="inventoryPagination" hidden>
+          <button class="page-btn" id="inventoryPrevPage" type="button">Previous</button>
+          <span class="page-info" id="inventoryPageInfo">Page 1 of 1</span>
+          <button class="page-btn" id="inventoryNextPage" type="button">Next</button>
+        </div>
+      </div>
+
+      <form class="panel form-panel" id="medicineForm">
+        <div class="form-title" id="medicineFormTitle">Add New Medicine</div>
+        <div class="form-status" id="medicineFormStatus">Fill in the inventory details and save them to the database.</div>
+        <div class="form-group">
+          <label class="form-label" for="genericName">Generic Name</label>
+          <input class="form-input" id="genericName" type="text" placeholder="e.g. Metformin" required />
+        </div>
+        <div class="form-group">
+          <label class="form-label" for="brandName">Brand Name</label>
+          <input class="form-input" id="brandName" type="text" placeholder="e.g. Glucophage" />
+        </div>
+        <div class="form-row">
+          <div class="form-group">
+            <label class="form-label" for="strength">Strength</label>
+            <input class="form-input" id="strength" type="text" placeholder="e.g. 500mg" />
+          </div>
+          <div class="form-group">
+            <label class="form-label" for="dosageForm">Dosage Form</label>
+            <input class="form-input" id="dosageForm" type="text" placeholder="Tablet, Capsule, Syrup" />
+          </div>
+        </div>
+        <div class="form-row">
+          <div class="form-group">
+            <label class="form-label" for="manufacturer">Manufacturer</label>
+            <input class="form-input" id="manufacturer" type="text" placeholder="e.g. Pharma Inc" />
+          </div>
+          <div class="form-group">
+            <label class="form-label" for="batchNumber">Batch Number</label>
+            <input class="form-input" id="batchNumber" type="text" placeholder="Optional batch id" />
+          </div>
+        </div>
+        <div class="form-row">
+          <div class="form-group">
+            <label class="form-label" for="quantity">Stock Level</label>
+            <input class="form-input" id="quantity" type="number" min="0" placeholder="0" required />
+          </div>
+          <div class="form-group">
+            <label class="form-label" for="price">Unit Price</label>
+            <input class="form-input" id="price" type="number" min="0" step="0.01" placeholder="0.00" />
+          </div>
+        </div>
+        <div class="form-group">
+          <label class="form-label" for="expiryDate">Expiry Date</label>
+          <input class="form-input" id="expiryDate" type="date" />
+        </div>
+        <div class="form-group">
+          <label class="form-label" for="description">Description</label>
+          <textarea class="form-input form-textarea" id="description" placeholder="Primary usage, storage requirements, or notes..."></textarea>
+        </div>
+        <div class="toggle-row">
+          <div>
+            <div class="form-label">Prescription Required</div>
+            <div class="form-hint">Mark restricted medicines as prescription-only.</div>
+          </div>
+          <label class="toggle">
+            <input id="isRestricted" type="checkbox" />
+            <span class="toggle-track"></span>
+          </label>
+        </div>
+        <div class="form-actions">
+          <button class="btn-primary" id="medicineSubmitBtn" type="submit">Register Product</button>
+          <button class="btn-secondary" id="medicineResetBtn" type="button">Reset</button>
+        </div>
+      </form>
+    </section>
+  </main>
+
+  <script src="../script/adminNavbar.js"></script>
+  <script src="../script/adminInventory.js"></script>
+</body>
+</html>

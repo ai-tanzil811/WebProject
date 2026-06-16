@@ -1,0 +1,77 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>MediVault | Admin Profile</title>
+
+  <link rel="stylesheet" href="../Styles/adminNavbar.css" />
+  <link rel="stylesheet" href="../Styles/adminDashboard.css" />
+  <link rel="stylesheet" href="../Styles/admin_profile.css" />
+</head>
+
+<body class="admin-page" data-active-nav="dashboard">
+  <header class="app-header">
+    <div data-include="admin-navbar"></div>
+  </header>
+
+  <main class="container">
+    <section class="card profile-card">
+      <h1 class="title">Admin Profile</h1>
+      <p class="subtitle">Manage your admin account.</p>
+
+      <div class="profile-grid">
+        <div class="profile-row">
+          <span class="label">Account Type</span>
+          <span class="value" id="profile-role">admin</span>
+        </div>
+
+        <div class="profile-row">
+          <span class="label">Name</span>
+          <span class="value" id="profile-name">-</span>
+        </div>
+
+        <div class="profile-row">
+          <span class="label">Email</span>
+          <span class="value" id="profile-email">-</span>
+        </div>
+
+        <div class="profile-row banner-row">
+          <span class="label">Shop Banner</span>
+          <span class="value">
+            <img id="profile-photo" class="profile-img" alt="Shop banner" hidden />
+          </span>
+        </div>
+      </div>
+    </section>
+
+    <section class="card profile-card settings-card">
+      <h2 class="section-title">Account Settings</h2>
+      <div class="settings-toolbar">
+        <button id="btn-edit" class="profile-btn" type="button">Edit Profile</button>
+        <span id="edit-status" class="edit-status"></span>
+      </div>
+
+      <form id="profile-form" class="profile-form" enctype="multipart/form-data" hidden>
+        <label class="form-field" for="input-name">
+          <span>Name</span>
+          <input id="input-name" name="name" type="text" autocomplete="name" />
+        </label>
+
+        <label class="form-field" for="input-photo">
+          <span>Shop Banner</span>
+          <input id="input-photo" name="photo" type="file" accept="image/*" />
+        </label>
+
+        <div class="form-actions">
+          <button id="btn-save" class="profile-btn" type="button">Save</button>
+          <button id="btn-cancel" class="profile-btn secondary" type="button">Cancel</button>
+        </div>
+      </form>
+    </section>
+  </main>
+
+  <script src="../script/profile.js"></script>
+  <script src="../script/adminNavbar.js"></script>
+</body>
+</html>

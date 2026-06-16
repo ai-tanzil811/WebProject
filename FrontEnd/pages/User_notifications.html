@@ -1,0 +1,40 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>MediVault | Notifications</title>
+  <link rel="stylesheet" href="../styles/userNavPages.css" />
+</head>
+<body data-active-nav="notifications">
+  <header class="app-header">
+    <div data-include="user-navbar"></div>
+  </header>
+
+  <main class="container">
+    <section class="card">
+      <h1>Notifications</h1>
+      <p class="subtitle">Stay updated with your account and order activity.</p>
+
+      <div class="notice-list" id="notification-list">
+        <article class="notice-item">
+          <h3>Cart Safety Check</h3>
+          <p>MediVault runs a conflict check before checkout to help prevent unsafe combinations.</p>
+        </article>
+
+        <article class="notice-item">
+          <h3>Order Updates</h3>
+          <p>After placing an order, track status and review delivery details from your checkout flow.</p>
+        </article>
+
+        <article class="notice-item">
+          <h3>Session Security</h3>
+          <p>Use Logout after each session, especially on shared devices.</p>
+        </article>
+      </div>
+    </section>
+  </main>
+  <script src="/script/userNavbar.js"></script>
+  <script src="/script/userNotifications.js"></script>
+</body>
+</html>

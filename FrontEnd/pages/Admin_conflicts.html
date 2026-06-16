@@ -1,0 +1,81 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>MediVault | Conflict Database</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link href="https://fonts.googleapis.com/css2?family=DM+Sans:wght@400;500;600;700&display=swap" rel="stylesheet" />
+  <link rel="stylesheet" href="../Styles/adminNavbar.css" />
+  <link rel="stylesheet" href="../Styles/adminConflicts.css" />
+</head>
+<body class="admin-page" data-active-nav="conflicts">
+  <div class="breadcrumb">Admin / Conflict DB</div>
+  <header class="app-header">
+    <div data-include="admin-navbar"></div>
+  </header>
+
+  <main class="page">
+    <section class="page-header">
+      <div>
+        <div class="page-title">Conflict Database</div>
+        <div class="page-sub">Manage and audit drug-to-drug interaction pairs.</div>
+      </div>
+      <button class="btn-add" id="openConflictFormBtn" type="button">+ Add Conflict Pair</button>
+    </section>
+
+    <section class="stats-row" id="conflictStats">
+      <div class="stat-pill">Loading conflict data...</div>
+    </section>
+
+    <section class="conflict-layout">
+      <form class="conflict-form panel" id="conflictForm">
+        <div class="panel-title" id="conflictFormTitle">Add Conflict Pair</div>
+        <div class="form-note" id="conflictFormNote">Select two medicines and save the conflict relationship.</div>
+
+        <label class="form-label" for="medicineId1">Medicine A</label>
+        <select id="medicineId1" class="form-control" required>
+          <option value="">Loading medicines...</option>
+        </select>
+
+        <label class="form-label" for="medicineId2">Medicine B</label>
+        <select id="medicineId2" class="form-control" required>
+          <option value="">Loading medicines...</option>
+        </select>
+
+        <div class="form-row">
+          <div>
+            <label class="form-label" for="conflictLevel">Severity</label>
+            <select id="conflictLevel" class="form-control" required>
+              <option value="moderate">Moderate</option>
+            </select>
+          </div>
+          <div>
+            <label class="form-label" for="conflictSearch">Quick Search</label>
+            <input id="conflictSearch" class="form-control" type="text" placeholder="Search conflicts..." />
+          </div>
+        </div>
+
+        <label class="form-label" for="conflictDescription">Description</label>
+        <textarea id="conflictDescription" class="form-control form-textarea" placeholder="Describe the interaction risk..."></textarea>
+
+        <label class="form-label" for="conflictRecommendation">Recommendation</label>
+        <textarea id="conflictRecommendation" class="form-control form-textarea" placeholder="Add clinical guidance or monitoring notes..."></textarea>
+
+        <div class="form-actions">
+          <button id="conflictSubmitBtn" class="btn-add" type="submit">Save Conflict</button>
+          <button id="conflictResetBtn" class="btn-secondary" type="button">Reset</button>
+        </div>
+      </form>
+
+      <section class="conflict-list" id="conflictList">
+        <div class="conflict-empty">Loading conflicts...</div>
+      </section>
+    </section>
+  </main>
+
+  <script src="../script/adminNavbar.js"></script>
+  <script src="../script/adminConflicts.js"></script>
+</body>
+</html>

@@ -1,0 +1,65 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>MediVault | Medicine Lookup</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link href="https://fonts.googleapis.com/css2?family=DM+Sans:wght@400;500;600;700&display=swap" rel="stylesheet" />
+  <link rel="stylesheet" href="../Styles/adminNavbar.css" />
+  <link rel="stylesheet" href="../Styles/adminSearch.css" />
+</head>
+<body class="admin-page" data-active-nav="search">
+  <div class="breadcrumb">Admin Search</div>
+  <header class="app-header">
+    <div data-include="admin-navbar"></div>
+  </header>
+
+  <main class="page">
+    <section class="page-header">
+      <div>
+        <div class="page-title">Medicine Lookup</div>
+        <div class="page-sub">Search through 12,403 pharmaceutical SKUs in real-time.</div>
+      </div>
+      <div class="sync-badge">
+        <div class="sync-icons">
+          <div class="sync-dot green">D</div>
+          <div class="sync-dot blue">S</div>
+        </div>
+        Real-Time Sync Active
+      </div>
+    </section>
+
+    <section class="search-row">
+      <div class="search-wrap">
+        <span class="search-icon">S</span>
+        <input id="lookupSearch" type="text" placeholder="Search by name, chemical formula, or symptom..." />
+      </div>
+      <button class="btn-search" id="lookupSearchBtn" type="button">Search</button>
+      <select class="category-select" id="lookupCategory">
+        <option value="">All Categories</option>
+      </select>
+    </section>
+
+    <section class="filter-tabs" id="lookupFilters">
+      <button class="filter-tab active" data-filter="all" type="button">All Stock</button>
+      <button class="filter-tab" data-filter="in" type="button">In Stock</button>
+      <button class="filter-tab" data-filter="low" type="button">Low Stock</button>
+      <button class="filter-tab" data-filter="rx" type="button">Rx Required</button>
+      <button class="filter-tab" data-filter="conflict" type="button">Conflicts</button>
+    </section>
+
+    <section class="search-summary" id="lookupSummary">
+      <div class="summary-pill">Loading medicine data...</div>
+    </section>
+
+    <section class="cards-grid" id="lookupCards">
+      <div class="empty-state">Loading medicines...</div>
+    </section>
+  </main>
+
+  <script src="../script/adminNavbar.js"></script>
+  <script src="../script/adminSearch.js"></script>
+</body>
+</html>

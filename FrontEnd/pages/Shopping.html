@@ -1,0 +1,144 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>MediVault | Shop Medicines</title>
+  <link rel="stylesheet" href="../styles/shopping.css" />
+</head>
+
+<body data-active-nav="dashboard">
+  <header class="app-header">
+    <div data-include="user-navbar"></div>
+  </header>
+
+  <main class="container">
+    <div class="main-content">
+      <section class="medicines-section" aria-labelledby="shopping-title">
+        <div class="section-header">
+          <div>
+            <h1 id="shopping-title">Available Medicines</h1>
+            <p class="section-subtitle">Browse inventory, check availability, and add medicines to your cart.</p>
+          </div>
+
+        </div>
+
+        <div class="loading" id="loadingSpinner" style="display: none;">
+          <p>Loading medicines...</p>
+        </div>
+
+        <div class="medicines-grid" id="medicinesGrid" aria-live="polite">
+          <!-- Medicines will be loaded here -->
+        </div>
+
+        <nav class="pagination" id="paginationContainer" aria-label="Medicine pages"></nav>
+      </section>
+
+      <aside class="sidebar" aria-label="Shopping tools">
+        <section class="search-box" aria-label="Search medicines">
+          <label class="sr-only" for="searchInput">Search medicines</label>
+          <input type="text" id="searchInput" placeholder="Search medicines..." autocomplete="off" />
+          <button class="btn-search" id="searchBtn" type="button">Search</button>
+        </section>
+
+        <section class="filters" aria-labelledby="filters-title">
+          <h2 id="filters-title">Filters</h2>
+
+          <div class="filter-group">
+            <label for="strengthFilter">Strength</label>
+            <input type="text" id="strengthFilter" placeholder="e.g., 500mg" autocomplete="off" />
+          </div>
+
+       
+
+          <div class="sidebar-actions">
+            <button class="btn-filter" id="applyFilterBtn" type="button">Apply Filters</button>
+            <button class="btn-clear-filter" id="clearFilterBtn" type="button">Clear Filters</button>
+          </div>
+        </section>
+
+        <section class="cart-summary" aria-labelledby="cart-summary-title">
+          <h2 id="cart-summary-title">Cart Summary</h2>
+
+          <dl class="cart-metrics">
+            <div>
+              <dt>Items</dt>
+              <dd id="cartCount">0</dd>
+            </div>
+            <div>
+              <dt>Total</dt>
+              <dd><span id="cartTotal">0.00</span> taka</dd>
+            </div>
+          </dl>
+
+          <div class="restricted-warning hidden" id="restrictedWarning">
+            <strong>Restricted medicine in cart</strong>
+            <p>Please upload a prescription at checkout for restricted items.</p>
+          </div>
+
+          <div class="sidebar-actions">
+            <button class="btn-view-cart" id="viewCartBtn" type="button">View Cart</button>
+            <button class="btn-checkout" id="checkoutBtn" type="button">Checkout</button>
+          </div>
+        </section>
+      </aside>
+    </div>
+  </main>
+
+  <div class="modal" id="cartModal" role="dialog" aria-modal="true" aria-labelledby="cart-modal-title">
+    <div class="modal-content">
+      <div class="modal-header">
+        <h2 id="cart-modal-title">Shopping Cart</h2>
+        <button class="btn-close" id="closeCartBtn" type="button" aria-label="Close cart">&times;</button>
+      </div>
+
+      <div class="modal-body">
+        <div class="cart-items-list" id="cartItemsList">
+          <!-- Cart items will be loaded here -->
+        </div>
+      </div>
+
+      <div class="modal-footer">
+        <div class="cart-total-large">Total: taka <span id="cartTotalLarge">0.00</span></div>
+        <button class="btn-continue-shopping" id="continueShopping" type="button">Continue Shopping</button>
+        <button class="btn-checkout-cart" id="checkoutFromCart" type="button">Proceed to Checkout</button>
+      </div>
+    </div>
+  </div>
+
+  <div class="modal" id="conflictModal" role="dialog" aria-modal="true" aria-labelledby="conflict-modal-title">
+    <div class="modal-content modal-large">
+      <div class="modal-header">
+        <h2 id="conflict-modal-title">Drug Interaction Warning</h2>
+        <button class="btn-close" id="closeConflictBtn" type="button" aria-label="Close warning">&times;</button>
+      </div>
+
+      <div class="modal-body">
+        <p class="warning-intro">Potential drug interactions were detected in your cart.</p>
+        <div class="conflicts-list" id="conflictsList">
+          <!-- Conflicts will be listed here -->
+        </div>
+        <p class="warning-note">You can remove conflicting medicines, or upload a prescription for manual review and continue.</p>
+
+        <div class="conflict-prescription" id="conflictPrescriptionSection">
+          <label for="conflictPrescriptionInput">Upload Prescription for Conflict Review</label>
+          <input id="conflictPrescriptionInput" type="file" accept="image/*,application/pdf" />
+          <p class="field-hint">Accepted formats: image or PDF. Admin review may be required before final approval.</p>
+          <button class="btn-upload-prescription" id="uploadConflictPrescriptionBtn" type="button">Upload and Continue</button>
+        </div>
+      </div>
+
+      <div class="modal-footer">
+        <button class="btn-remove-items" id="editCartBtn" type="button">Edit Cart</button>
+        <button class="btn-checkout-cart" id="continueCheckoutBtn" type="button">Continue to Checkout</button>
+      </div>
+    </div>
+  </div>
+
+  <div class="feedback-message" id="feedbackMessage" data-feedback hidden></div>
+  <div class="success-message" id="successMessage" data-success hidden></div>
+
+  <script src="/script/userNavbar.js"></script>
+  <script src="/script/shopping.js"></script>
+</body>
+</html>

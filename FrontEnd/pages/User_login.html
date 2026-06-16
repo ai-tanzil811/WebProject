@@ -1,0 +1,106 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>MediVault | User Login</title>
+
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700;800&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="../Styles/userLogin.css">
+</head>
+
+<body class="auth-page">
+
+  <main class="auth-shell" data-default-role="user">
+    <section class="auth-hero">
+      <a href="/" style="position: absolute; top: 20px; left: 20px; color: #666; font-size: large; text-decoration: none; font-size: 14px;"> Back to Home</a>
+      <div class="auth-brand">MediVault</div>
+      <span class="auth-chip">User Portal</span>
+      <h1>Access the clinical workspace</h1>
+      <p>
+        Sign in with the email stored in the Users table and your hashed password.
+      </p>
+
+      <div class="auth-points">
+        <article class="auth-point">
+          <span>01</span>
+          <div>
+            <h3>Verified accounts</h3>
+            <p>Checks the database before granting access.</p>
+          </div>
+        </article>
+
+        <article class="auth-point">
+          <span>02</span>
+          <div>
+            <h3>Secure session flow</h3>
+          </div>
+        </article>
+      </div>
+    </section>
+
+    <section class="auth-panel">
+      <div class="auth-header">
+        <div>
+          <p class="auth-eyebrow" data-role-label>Secure sign in</p>
+          <h2 data-role-title>User Access</h2>
+          <p class="subtitle" data-role-subtitle>
+            Use your clinical email and password to continue.
+          </p>
+        </div>
+        <p class="feedback" data-feedback hidden></p>
+      </div>
+
+      <div class="role-grid">
+        <button type="button" class="role-card active" data-role="user">
+          <div class="role-icon">👤</div>
+          <h3>User</h3>
+          <p>Standard Clinical Access</p>
+        </button>
+
+        <button type="button" class="role-card" data-role="admin">
+          <div class="role-icon">🛡</div>
+          <h3>Pharmacist</h3>
+          <p>Pharmacy Management Access</p>
+        </button>
+      </div>
+
+      <form class="auth-form" novalidate>
+        <input type="hidden" name="login_role" value="user">
+
+        <label class="form-field">
+          <span>Email address</span>
+          <input type="email" name="email" placeholder="you@example.com" autocomplete="email" required>
+        </label>
+
+        <label class="form-field">
+          <span>Password</span>
+          <div class="password-field">
+            <input type="password" name="password" placeholder="Enter your password" autocomplete="current-password" required>
+            <button type="button" class="password-toggle" data-password-toggle>Show</button>
+          </div>
+        </label>
+
+        <div class="extra">
+          <label class="remember">
+            <input type="checkbox" name="remember">
+            Remember this device
+          </label>
+
+          <a href="/pages/ForgotPassword.html">Forgot password?</a>
+        </div>
+
+        <button class="btn" type="submit" data-submit>Sign in as User</button>
+      </form>
+
+      <p class="footer-text">
+        By signing in, you agree to session logging and access auditing.
+      </p>
+    </section>
+  </main>
+
+  <script src="../script/login.js"></script>
+</body>
+</html>

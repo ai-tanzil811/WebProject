@@ -1,0 +1,116 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>MediVault | Profile</title>
+  <link rel="stylesheet" href="../Styles/userNavPages.css" />
+</head>
+<body data-active-nav="profile">
+  <header class="app-header">
+    <div data-include="user-navbar"></div>
+  </header>
+
+  <main class="container">
+    <section class="card">
+      <h1>Profile</h1>
+      <p class="subtitle">Manage your account navigation and continue to your shopping dashboard.</p>
+
+      <div class="profile-grid">
+        <div class="profile-row">
+          <span class="label">Account Type</span>
+          <span class="value" id="profile-role">User</span>
+        </div>
+        <div class="profile-row">
+          <span class="label">Name</span>
+          <span class="value" id="profile-name">—</span>
+        </div>
+        <div class="profile-row">
+          <span class="label">Email</span>
+          <span class="value" id="profile-email">—</span>
+        </div>
+        <div class="profile-row">
+          <span class="label">National ID</span>
+          <span class="value" id="profile-nid">—</span>
+        </div>
+        <div class="profile-row">
+          <span class="label">Age</span>
+          <span class="value" id="profile-age">—</span>
+        </div>
+        <div class="profile-row">
+          <span class="label">Profile Photo</span>
+          <span class="value"><img id="profile-photo" src="/assets/default-user.png" alt="profile" style="height:48px;border-radius:6px;"/></span>
+        </div>
+      </div>
+    </section>
+    <section class="card" style="margin-top:1rem;">
+      <h2>Account Settings</h2>
+      <div style="display:flex;gap:.6rem;align-items:center;margin-top:.6rem;">
+        <button id="btn-edit" class="btn-back" style="background:var(--primary);">Edit Profile</button>
+        <span id="edit-status" style="color:var(--gray-600);"></span>
+      </div>
+
+      <form id="profile-form" style="margin-top:1rem;display:none;" enctype="multipart/form-data">
+        <div class="profile-grid">
+          <div class="profile-row">
+            <span class="label">Name</span>
+            <input class="value" id="input-name" name="name" style="width:100%;padding:.5rem;border-radius:6px;border:1px solid var(--gray-200);" />
+          </div>
+          <div class="profile-row">
+            <span class="label">National ID</span>
+            <input class="value" id="input-nid" name="nid" style="width:100%;padding:.5rem;border-radius:6px;border:1px solid var(--gray-200);" />
+          </div>
+          <div class="profile-row">
+            <span class="label">Age</span>
+            <input class="value" id="input-age" name="age" type="number" min="0" style="width:100%;padding:.5rem;border-radius:6px;border:1px solid var(--gray-200);" />
+          </div>
+          <div class="profile-row">
+            <span class="label">Photo</span>
+            <input id="input-photo" name="photo" type="file" accept="image/*" />
+          </div>
+          <div style="display:flex;gap:.5rem;">
+            <button id="btn-save" type="button" class="btn-back">Save</button>
+            <button id="btn-cancel" type="button" class="btn-back" style="background:var(--gray-300);color:var(--text-primary);">Cancel</button>
+          </div>
+        </div>
+      </form>
+    </section>
+    <section class="card" style="margin-top:1rem;">
+      <h2>Prescription Upload</h2>
+      <p class="subtitle">Upload a prescription document for restricted medicines. Admins will review it and update your status.</p>
+      <div id="prescription-status-card" class="profile-grid" style="margin-top:1rem;">
+        <div class="profile-row">
+          <span class="label">Upload Status</span>
+          <span class="value" id="prescription-status">No prescription uploaded yet</span>
+        </div>
+        <div class="profile-row">
+          <span class="label">Uploaded File</span>
+          <span class="value" id="prescription-file-name">—</span>
+        </div>
+        <div class="profile-row">
+          <span class="label">Review Notes</span>
+          <span class="value" id="prescription-notes">—</span>
+        </div>
+        <div class="profile-row">
+          <span class="label">Last Updated</span>
+          <span class="value" id="prescription-timestamp">—</span>
+        </div>
+      </div>
+      <form id="prescription-upload-form" style="margin-top:1rem;" enctype="multipart/form-data">
+        <div class="profile-grid">
+          <div class="profile-row">
+            <span class="label">Upload Prescription</span>
+            <input id="prescription-input" name="prescription" type="file" accept="image/*,application/pdf" />
+          </div>
+          <div style="display:flex;gap:.5rem;align-items:center;">
+            <button id="prescription-upload-btn" type="submit" class="btn-back">Upload</button>
+            <span id="upload-feedback" style="color:var(--gray-600);"></span>
+          </div>
+        </div>
+      </form>
+    </section>
+  </main>
+  <script src="/script/userNavbar.js"></script>
+  <script src="../script/profile.js"></script>
+</body>
+</html>

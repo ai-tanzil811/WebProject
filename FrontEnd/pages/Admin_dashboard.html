@@ -1,0 +1,189 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>MediVault | Admin Dashboard</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link href="https://fonts.googleapis.com/css2?family=DM+Sans:wght@400;500;600;700&display=swap" rel="stylesheet" />
+  <link rel="stylesheet" href="../Styles/adminNavbar.css" />
+  <link rel="stylesheet" href="../Styles/adminDashboard.css" />
+</head>
+<body class="admin-page" data-active-nav="dashboard">
+  <div class="breadcrumb">Admin / Dashboard</div>
+  <header class="app-header">
+    <div data-include="admin-navbar"></div>
+  </header>
+
+  <main class="page">
+    <section class="stat-grid">
+      <div class="stat-card">
+        <div class="stat-header">
+          <div class="stat-icon blue">T</div>
+          <span class="stat-label">Total</span>
+        </div>
+        <div class="stat-value blue" id="stat-total">0</div>
+        <div class="stat-sublabel">Active Medicines</div>
+      </div>
+      <div class="stat-card">
+        <div class="stat-header">
+          <div class="stat-icon red">!</div>
+          <span class="stat-label">Critical</span>
+        </div>
+        <div class="stat-value red" id="stat-low">0</div>
+        <div class="stat-sublabel">Low Stock Alerts</div>
+      </div>
+      <div class="stat-card">
+        <div class="stat-header">
+          <div class="stat-icon yellow">P</div>
+          <span class="stat-label">Pending</span>
+        </div>
+        <div class="stat-value yellow" id="stat-expiring">0</div>
+        <div class="stat-sublabel">Expiring Soon</div>
+      </div>
+      <div class="stat-card">
+        <div class="stat-header">
+          <div class="stat-icon teal">R</div>
+          <span class="stat-label">Review</span>
+        </div>
+        <div class="stat-value teal" id="stat-reviews">0</div>
+        <div class="stat-sublabel">Pending Rx Reviews</div>
+      </div>
+    </section>
+
+    <section class="content-grid">
+      <div class="panel">
+        <div class="panel-header">
+          <span class="panel-title">Pending Prescription Reviews</span>
+          <a class="view-all" href="#">View All Reviews</a>
+        </div>
+        <div id="prescriptionList" class="prescription-list">
+          <p class="panel-text">Loading pending prescription uploads...</p>
+        </div>
+      </div>
+      <div class="side-panel">
+        <div class="panel quick-actions">
+          <div class="panel-title">Quick Actions</div>
+          <button id="addMedicineBtn" class="btn-primary" type="button">Add New Medicine</button>
+          <button class="btn-secondary" id="exportReportBtn" type="button">Export Compliance Report</button>
+        </div>
+        <div class="panel prescriptions-panel">
+          <div class="panel-header">
+            <span class="panel-title">Recent Reserves</span>
+          </div>
+          <div id="reservesList" class="prescription-list">
+            <p class="panel-text">Loading recent reserves...</p>
+          </div>
+        </div>
+    
+      </div>
+    </section>
+
+    
+
+  <!-- Add Medicine Modal -->
+  <div id="addMedicineModal" class="modal hidden">
+    <div class="modal-backdrop"></div>
+    <div class="modal-content">
+      <div class="modal-header">
+        <h2>Add New Medicine</h2>
+        <button class="modal-close" type="button" aria-label="Close">&times;</button>
+      </div>
+      <form id="addMedicineForm" class="modal-form">
+        <div class="form-row">
+          <div class="form-group">
+            <label for="genericName">Generic Name *</label>
+            <input type="text" id="genericName" name="genericName" required />
+          </div>
+          <div class="form-group">
+            <label for="brandName">Brand Name *</label>
+            <input type="text" id="brandName" name="brandName" required />
+          </div>
+        </div>
+
+        <div class="form-row">
+          <div class="form-group">
+            <label for="strength">Strength</label>
+            <input type="text" id="strength" name="strength" placeholder="e.g., 500mg" />
+          </div>
+          <div class="form-group">
+            <label for="dosageForm">Dosage Form</label>
+            <select id="dosageForm" name="dosageForm">
+              <option value="">Select Dosage Form</option>
+              <option value="Tablet">Tablet</option>
+              <option value="Capsule">Capsule</option>
+              <option value="Liquid">Liquid</option>
+              <option value="Injection">Injection</option>
+              <option value="Cream">Cream</option>
+              <option value="Ointment">Ointment</option>
+            </select>
+          </div>
+        </div>
+
+        <div class="form-row">
+          <div class="form-group">
+            <label for="manufacturer">Manufacturer</label>
+            <input type="text" id="manufacturer" name="manufacturer" />
+          </div>
+          <div class="form-group">
+            <label for="batchNumber">Batch Number</label>
+            <input type="text" id="batchNumber" name="batchNumber" />
+          </div>
+        </div>
+
+        <div class="form-row">
+          <div class="form-group">
+            <label for="expiryDate">Expiry Date</label>
+            <input type="date" id="expiryDate" name="expiryDate" />
+          </div>
+          <div class="form-group">
+            <label for="quantity">Quantity *</label>
+            <input type="number" id="quantity" name="quantity" required min="0" />
+          </div>
+        </div>
+
+        <div class="form-row">
+          <div class="form-group">
+            <label for="price">Price</label>
+            <input type="number" id="price" name="price" step="0.01" min="0" />
+          </div>
+          <div class="form-group checkbox-group">
+            <label for="isRestricted">
+              <input type="checkbox" id="isRestricted" name="isRestricted" />
+              Restricted Medicine
+            </label>
+          </div>
+        </div>
+
+        <div class="form-row">
+          <div class="form-group full">
+            <label for="description">Description</label>
+            <textarea id="description" name="description" rows="3"></textarea>
+          </div>
+        </div>
+
+        <div class="modal-actions">
+          <button type="button" class="btn-secondary modal-cancel">Cancel</button>
+          <button type="submit" class="btn-primary">Add Medicine</button>
+        </div>
+      </form>
+    </div>
+  </div>
+
+  <!-- Compliance Report Modal -->
+  <div id="complianceReportModal" class="modal hidden">
+    <div class="modal-backdrop"></div>
+    <div class="modal-content">
+      <div class="modal-header">
+        <h2>Compliance Report</h2>
+        <button class="modal-close-report" type="button" aria-label="Close">&times;</button>
+      </div>
+      <div id="reportContent" class="report-content"></div>
+    </div>
+  </div>
+
+  <script src="../script/adminNavbar.js"></script>
+  <script src="../script/adminDashboard.js"></script>
+</body>
+</html>

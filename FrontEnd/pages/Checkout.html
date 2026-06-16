@@ -1,0 +1,106 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>MediVault - Checkout</title>
+  <link rel="stylesheet" href="../styles/checkout.css">
+</head>
+<body>
+  <div class="navbar">
+    <div class="navbar-container">
+      <div class="navbar-brand">🏥 MediVault</div>
+      <a href="../pages/User_notifications.html" class="navbar-notification" aria-label="View notifications">
+        <span class="notification-icon">🔔</span>
+        <span class="notification-count" id="checkoutNotificationCount" hidden>0</span>
+      </a>
+      <a href="../pages/Shopping.html" class="navbar-back">← Back to Shopping</a>
+    </div>
+  </div>
+
+  <div class="container">
+    <div class="checkout-wrapper">
+      <div class="checkout-main">
+        <h1>Order Checkout</h1>
+
+        <div class="order-summary">
+          <h2>Order Summary</h2>
+          <div class="summary-items" id="summaryItems">
+            <!-- Items will be loaded here -->
+          </div>
+          <div class="summary-total">
+            <span>Total Amount:</span>
+            <span class="total-price">in taka <span id="totalAmount">0.00</span></span>
+          </div>
+        </div>
+
+        <form class="checkout-form" id="checkoutForm">
+          <div class="form-group">
+            <label for="deliveryAddress">Delivery Address *</label>
+            <textarea id="deliveryAddress" name="deliveryAddress" required placeholder="Enter your complete delivery address" rows="4"></textarea>
+          </div>
+
+          <div class="form-group">
+            <label for="notes">Special Instructions (Optional)</label>
+            <textarea id="notes" name="notes" placeholder="Any special delivery instructions..." rows="3"></textarea>
+          </div>
+
+          <div class="form-group prescription-group hidden" id="prescriptionGroup">
+            <label for="prescription">Upload Prescription (Required for restricted medicines or interaction conflicts)</label>
+            <input id="prescription" name="prescription" type="file" accept="image/*,application/pdf" />
+            <p class="field-hint">Upload a valid PDF or image file if your cart contains restricted medicines or conflicting medicines.</p>
+            <p class="prescription-status-note hidden" id="prescriptionReuseNotice"></p>
+          </div>
+
+          <div class="order-summary-mobile">
+            <div class="mobile-total">Total: ৳<span id="totalAmountMobile">0.00</span></div>
+          </div>
+
+          <button type="submit" class="btn-place-order" id="placeOrderBtn">Place Order</button>
+          <a href="/pages/Shopping.html" class="btn-cancel">Cancel</a>
+        </form>
+
+        <div class="checkout-info">
+          <h3>Delivery Information</h3>
+          <p>✓ Standard delivery within 2-3 business days</p>
+          <p>✓ Track your order status anytime</p>
+          <p>✓ Secure payment processing</p>
+          <p>✓ All medicines are from verified manufacturers</p>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- Success Modal -->
+  <div class="modal" id="successModal">
+    <div class="modal-content modal-centered">
+      <div class="modal-body">
+        <div class="success-icon">✓</div>
+        <h2>Order Placed Successfully!</h2>
+        <p>Your order has been confirmed.</p>
+        <p class="order-id">Order ID: <strong id="orderIdDisplay"></strong></p>
+        <p class="tracking-info">You can track your order from your order history.</p>
+        <button class="btn-continue" id="continueBtn">Continue Shopping</button>
+      </div>
+    </div>
+  </div>
+
+  <div class="modal" id="conflictModal">
+    <div class="modal-content modal-centered modal-warning">
+      <div class="modal-body">
+        <div class="warning-icon">⚠️</div>
+        <h2>Drug Interaction Warning</h2>
+        <div class="conflict-list" id="checkoutConflictList"></div>
+        <p class="tracking-info">Checkout is blocked until the conflicting medicines are removed.</p>
+        <button class="btn-continue" id="returnToCartBtn">Return to Cart</button>
+      </div>
+    </div>
+  </div>
+
+  <!-- Feedback Messages -->
+  <div class="feedback-message" id="feedbackMessage" data-feedback hidden></div>
+  <div class="success-message" id="successMessage" data-success hidden></div>
+
+  <script src="/script/checkout.js"></script>
+</body>
+</html>
