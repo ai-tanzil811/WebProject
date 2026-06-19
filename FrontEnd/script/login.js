@@ -1,7 +1,3 @@
-/**
- * MediVault Login Form Handler
- * Manages user/admin login with role switching
- */
 
 document.addEventListener('DOMContentLoaded', initializeLogin);
 
